@@ -1,0 +1,19 @@
+﻿<Window x:Class="WPFTechniques.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFTechniques"
+        xmlns:views="clr-namespace:WPFTechniques.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="WPF Techniques" Height="600" Width="900">
+    <Window.Resources>
+        <DataTemplate x:Key="TopLevelTemplate">
+            <views:TopLevel_View/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <UserControl ContentTemplate="{StaticResource TopLevelTemplate}"/>
+    </Grid>
+</Window>
