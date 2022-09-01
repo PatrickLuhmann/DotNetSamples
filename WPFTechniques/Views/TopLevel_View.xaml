@@ -11,6 +11,18 @@
         <vms:TopLevel_VM/>
     </UserControl.DataContext>
     <Grid>
-        <TextBlock Text="{Binding Salutation}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Margin="5" Content="Button 1" Command="{Binding IncrementCounterCommand}"/>
+            <Button Margin="5" Content="Button 2" Command="{Binding DecrementCounterCommand}"/>
+            <TextBlock Text="{Binding Counter, Mode=OneWay}"/>
+            <Button Margin="5" Content="+10" Command="{Binding ModifyByTenCommand}" CommandParameter="INC"/>
+            <Button Margin="5" Content="-10" Command="{Binding ModifyByTenCommand}" CommandParameter="DEC"/>
+        </StackPanel>
     </Grid>
 </UserControl>
