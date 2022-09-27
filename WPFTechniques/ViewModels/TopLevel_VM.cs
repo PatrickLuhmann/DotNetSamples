@@ -33,6 +33,9 @@ namespace WPFTechniques.ViewModels
 		[ObservableProperty]
 		private int counter;
 
+		[ObservableProperty]
+		private SimpleDialogBox_VM? simpleDialogBox;
+
 		// This attribute generates the code for XxxCommand, which
 		// is what the XAML will bind to.
 		[RelayCommand]
@@ -50,6 +53,30 @@ namespace WPFTechniques.ViewModels
 				Counter -= 10;
 			else
 				Counter = 0;
+		}
+
+		[RelayCommand]
+		private void ShowSimpleDialogBox()
+		{
+			SimpleDialogBox_VM sdbvm = new SimpleDialogBox_VM("Simple Dialog Box");
+			// TODO: Add OnOK/OnCancel/OnCloseRequest actions.
+			sdbvm.OnOk = (_dbvm) =>
+			{
+				// Get any input the user provided and store it in this VM object.
+
+				// Assuming the user input is valid, tell the caller that
+				// the dialog box is done being used.
+				_dbvm.Result = true;
+			};
+
+			// This statement is blocking.
+			SimpleDialogBox = sdbvm;
+
+			// TODO: Process the results.
+			bool result = sdbvm.Result;
+
+			// Set this to null so that it doesn't pop up again unexpectedly.
+			SimpleDialogBox = null;
 		}
 	}
 }

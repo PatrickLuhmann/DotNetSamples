@@ -1,0 +1,42 @@
+﻿<Window x:Class="WPFTechniques.Views.SimpleDialogBox_View"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFTechniques.Views"
+        xmlns:vms="clr-namespace:WPFTechniques.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vms:SimpleDialogBox_VM, IsDesignTimeCreatable=True}"
+        Title="{Binding Title}" Height="350" Width="400">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <TextBlock>Hello world!</TextBlock>
+
+            <!-- Buttons -->
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Column="0" Width="75" Command="{Binding CancelCmd}" CommandParameter="{Binding}">Cancel</Button>
+                <Button Grid.Column="1" Width="75" Command="{Binding OkCmd}" CommandParameter="{Binding}">OK</Button>
+            </Grid>
+
+            <!-- Alt Buttons -->
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Column="0" Width="75" Command="{Binding AltCancelCommand}" CommandParameter="{Binding}">Alt Cancel</Button>
+                <Button Grid.Column="1" Width="75" Command="{Binding AltOkCommand}" CommandParameter="{Binding}">Alt OK</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

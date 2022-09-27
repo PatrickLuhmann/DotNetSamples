@@ -5,13 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFTechniques.Views"
              xmlns:vms="clr-namespace:WPFTechniques.ViewModels"
+             local:DialogBehavior.SimpleDialogBox="{Binding SimpleDialogBox}"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vms:TopLevel_VM, IsDesignTimeCreatable=True}"
              d:DesignHeight="600" d:DesignWidth="900">
     <UserControl.DataContext>
         <vms:TopLevel_VM/>
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -23,6 +26,9 @@
             <TextBlock Text="{Binding Counter, Mode=OneWay}"/>
             <Button Margin="5" Content="+10" Command="{Binding ModifyByTenCommand}" CommandParameter="INC"/>
             <Button Margin="5" Content="-10" Command="{Binding ModifyByTenCommand}" CommandParameter="DEC"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
         </StackPanel>
     </Grid>
 </UserControl>
