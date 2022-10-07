@@ -23,6 +23,20 @@ namespace WPFTechniques.Views
 		public TopLevel_View()
 		{
 			InitializeComponent();
+
+			// Set the ListView to display the entries sorted DESC.
+			// NOTE: This does not show up in the designer; I don't know why.
+			//SecondListView.Items.SortDescriptions
+			//	.Add(new System.ComponentModel.SortDescription(null, System.ComponentModel.ListSortDirection.Descending));
+
+			// Set the CVS to display the entries sorted DESC.
+			// NOTE: The online example I am using as a reference uses "listingDataView" directly. This does not
+			// work for me; I have to look it up in the Resources dictionary.
+			CollectionViewSource? xxx = Resources["listingDataView"] as CollectionViewSource;
+			// Alternate way to get the CVS Resource. I do not know if there is a real difference between these methods.
+			//CollectionViewSource? xxx = TryFindResource("listingDataView") as CollectionViewSource;
+			xxx?.SortDescriptions
+				.Add(new System.ComponentModel.SortDescription(null, System.ComponentModel.ListSortDirection.Descending));
 		}
 	}
 }

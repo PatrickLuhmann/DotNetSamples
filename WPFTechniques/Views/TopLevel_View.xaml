@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WPFTechniques.Views"
              xmlns:vms="clr-namespace:WPFTechniques.ViewModels"
              local:DialogBehavior.SimpleDialogBox="{Binding SimpleDialogBox}"
@@ -13,6 +13,9 @@
         <vms:TopLevel_VM/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <CollectionViewSource Source="{Binding Path=SomeNumbers}" x:Key="listingDataView"/>
+        <CollectionViewSource Source="{Binding Path=MyCVS}" x:Key="someNumView2"/>
+
         <!-- As expected, this style affects everything in this Window. -->
         <!-- If you want a style to affect the entire application, put it in app.xaml. -->
         <Style TargetType="Button">
@@ -45,6 +48,15 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Style="{StaticResource PinkBackground}" Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
+            <Button Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <ListView Name="FirstListView" ItemsSource="{Binding SomeNumbers}">
+            </ListView>
+            <ListView Name="SecondListView" ItemsSource="{Binding Source={StaticResource listingDataView}}">
+            </ListView>
+            <ListView Name="ThirdListView" ItemsSource="{Binding MyCollectionView}">
+            </ListView>
         </StackPanel>
     </Grid>
 </UserControl>
