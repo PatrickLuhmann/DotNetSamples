@@ -12,6 +12,22 @@
     <UserControl.DataContext>
         <vms:TopLevel_VM/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <!-- As expected, this style affects everything in this Window. -->
+        <!-- If you want a style to affect the entire application, put it in app.xaml. -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="AliceBlue"/>
+        </Style>
+        <!-- If you give it a "name" it will only be used if explicitly chosen. -->
+        <Style x:Key="PinkBackground" TargetType="Button">
+            <Setter Property="Background" Value="HotPink"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="Yellow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,7 +44,7 @@
             <Button Margin="5" Content="-10" Command="{Binding ModifyByTenCommand}" CommandParameter="DEC"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
+            <Button Style="{StaticResource PinkBackground}" Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
         </StackPanel>
     </Grid>
 </UserControl>
