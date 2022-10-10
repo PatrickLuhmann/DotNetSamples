@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSamples", "DotNetSamples\DotNetSamples.csproj", "{E632F373-B602-4BCF-B7E2-9EA0D6ABC1EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetSamples", "DotNetSamples\DotNetSamples.csproj", "{E632F373-B602-4BCF-B7E2-9EA0D6ABC1EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTechniques", "WPFTechniques\WPFTechniques.csproj", "{9781B9C0-C1FB-4613-B696-85BF20CD2F60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFTechniques", "WPFTechniques\WPFTechniques.csproj", "{9781B9C0-C1FB-4613-B696-85BF20CD2F60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTechniques_ViewModels", "WPFTechniques_ViewModels\WPFTechniques_ViewModels.csproj", "{FF421F6F-EE14-4BBE-9777-B712D9F54194}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9781B9C0-C1FB-4613-B696-85BF20CD2F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9781B9C0-C1FB-4613-B696-85BF20CD2F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9781B9C0-C1FB-4613-B696-85BF20CD2F60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF421F6F-EE14-4BBE-9777-B712D9F54194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF421F6F-EE14-4BBE-9777-B712D9F54194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF421F6F-EE14-4BBE-9777-B712D9F54194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF421F6F-EE14-4BBE-9777-B712D9F54194}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
