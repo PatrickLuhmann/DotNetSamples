@@ -34,50 +34,64 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
+        
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Margin="5" Content="Button 1" Command="{Binding IncrementCounterCommand}"/>
-            <Button Margin="5" Content="Button 2" Command="{Binding DecrementCounterCommand}"/>
-            <TextBlock Text="{Binding Counter, Mode=OneWay}"/>
-            <Button Margin="5" Content="+10" Command="{Binding ModifyByTenCommand}" CommandParameter="INC"/>
-            <Button Margin="5" Content="-10" Command="{Binding ModifyByTenCommand}" CommandParameter="DEC"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Style="{StaticResource PinkBackground}" Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <ListView Name="FirstListView" ItemsSource="{Binding SomeNumbers}"/>
-                    <ListView Name="SecondListView" ItemsSource="{Binding Source={StaticResource listingDataView}}"/>
-                    <ListView Name="ThirdListView" ItemsSource="{Binding MyCollectionView}"/>
-                </StackPanel>
-            </Grid>
-            <StackPanel Orientation="Horizontal">
-                <StackPanel.DataContext>
-                    <vms:Subclass_VM/>
-                </StackPanel.DataContext>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Button Commands">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
-                        <ListView ItemsSource="{Binding BaseNumbers}"/>
-                        <ListView ItemsSource="{Binding BaseNumbersCV}"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button Margin="5" Content="Button 1" Command="{Binding IncrementCounterCommand}"/>
+                        <Button Margin="5" Content="Button 2" Command="{Binding DecrementCounterCommand}"/>
+                        <TextBlock Text="{Binding Counter, Mode=OneWay}"/>
+                        <Button Margin="5" Content="+10" Command="{Binding ModifyByTenCommand}" CommandParameter="INC"/>
+                        <Button Margin="5" Content="-10" Command="{Binding ModifyByTenCommand}" CommandParameter="DEC"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Button Style="{StaticResource PinkBackground}" Margin="5" Content="Show Dialog Box" Command="{Binding ShowSimpleDialogBoxCommand}" CommandParameter="{Binding}"/>
                     </StackPanel>
                 </Grid>
-            </StackPanel>
-        </StackPanel>
+            </TabItem>
+            <TabItem Header="List Sorting">
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <ListView Name="FirstListView" ItemsSource="{Binding SomeNumbers}"/>
+                            <ListView Name="SecondListView" ItemsSource="{Binding Source={StaticResource listingDataView}}"/>
+                            <ListView Name="ThirdListView" ItemsSource="{Binding MyCollectionView}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid>
+                        <Grid.DataContext>
+                            <vms:Subclass_VM/>
+                        </Grid.DataContext>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+                            <ListView ItemsSource="{Binding BaseNumbers}"/>
+                            <ListView ItemsSource="{Binding BaseNumbersCV}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </UserControl>
