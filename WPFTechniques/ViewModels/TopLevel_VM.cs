@@ -30,6 +30,7 @@ namespace WPFTechniques.ViewModels
 		public string Salutation { get; set; } = "Welcome to TopLevel_VM";
 
 		public ListSortingWPF_VM ListSortingSample { get; set; }
+		public NutritionWPF_VM NutritionSample { get; set; }
 
 		// This attribute only generates the source for the property. It depends
 		// on the INotifyPropertyChanged infrastructure. Provide that either
@@ -86,6 +87,7 @@ namespace WPFTechniques.ViewModels
 		public TopLevel_VM()
 		{
 			ListSortingSample = new();
+			NutritionSample = new();
 		}
 	}
 }

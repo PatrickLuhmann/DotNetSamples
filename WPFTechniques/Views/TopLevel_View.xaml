@@ -4,17 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WPFTechniques.Views"
-             xmlns:vms="clr-namespace:WPFTechniques.ViewModels"
+             xmlns:myvms="clr-namespace:WPFTechniques.ViewModels"
+             xmlns:corevms="clr-namespace:WPFTechniques_ViewModels;assembly=WPFTechniques_ViewModels"
              local:DialogBehavior.SimpleDialogBox="{Binding SimpleDialogBox}"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance vms:TopLevel_VM, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance myvms:TopLevel_VM, IsDesignTimeCreatable=True}"
              d:DesignHeight="600" d:DesignWidth="900">
     <UserControl.DataContext>
-        <vms:TopLevel_VM/>
+        <myvms:TopLevel_VM/>
     </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="ListSortingTemplate">
             <local:ListSorting_View/>
+        </DataTemplate>
+        <DataTemplate x:Key="NutritionTemplate">
+            <local:Nutrition_View/>
         </DataTemplate>
 
         <!-- As expected, this style affects everything in this Window. -->
@@ -65,6 +69,9 @@
                 <DockPanel>
                     <UserControl Content="{Binding ListSortingSample}" ContentTemplate="{StaticResource ListSortingTemplate}"/>
                 </DockPanel>
+            </TabItem>
+            <TabItem Header="Nutrition">
+                <UserControl Content="{Binding NutritionSample}" ContentTemplate="{StaticResource NutritionTemplate}" />
             </TabItem>
         </TabControl>
 

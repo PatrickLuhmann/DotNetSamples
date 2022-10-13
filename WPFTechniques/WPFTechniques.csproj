@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Nutrition\Nutrition.csproj" />
     <ProjectReference Include="..\WPFTechniques_ViewModels\WPFTechniques_ViewModels.csproj" />
   </ItemGroup>
 
