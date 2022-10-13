@@ -29,6 +29,8 @@ namespace WPFTechniques.ViewModels
 	{
 		public string Salutation { get; set; } = "Welcome to TopLevel_VM";
 
+		public ListSortingWPF_VM ListSortingSample { get; set; }
+
 		// This attribute only generates the source for the property. It depends
 		// on the INotifyPropertyChanged infrastructure. Provide that either
 		// with one of the attributes on the class, or implement the interface
@@ -38,12 +40,6 @@ namespace WPFTechniques.ViewModels
 
 		[ObservableProperty]
 		private SimpleDialogBox_VM? simpleDialogBox;
-
-		[ObservableProperty]
-		ObservableCollection<int> someNumbers = new();
-
-		[ObservableProperty]
-		private CollectionView myCollectionView;
 
 		// This attribute generates the code for XxxCommand, which
 		// is what the XAML will bind to.
@@ -87,32 +83,9 @@ namespace WPFTechniques.ViewModels
 			// Set this to null so that it doesn't pop up again unexpectedly.
 			SimpleDialogBox = null;
 		}
-
-		[RelayCommand]
-		private void AddNumber()
-		{
-			var rng = new Random(DateTime.Now.Millisecond);
-			int num = rng.Next(-1000, 1000);
-			someNumbers.Add(num);
-		}
-
 		public TopLevel_VM()
 		{
-			SomeNumbers.Add(1);
-			SomeNumbers.Add(10);
-			SomeNumbers.Add(-1);
-			SomeNumbers.Add(123);
-
-			//ListCollectionView lcv = new();
-			// Configure the default view for SomeNumbers to automatically sort ASC.
-			var numDefView = (CollectionView)CollectionViewSource.GetDefaultView(SomeNumbers);
-			numDefView.SortDescriptions.Add(new SortDescription(null, ListSortDirection.Ascending));
-
-			// Create our own CollectionViewSource. The CollectionView can be bound in place of the underlying collection.
-			CollectionViewSource cvs = new();
-			cvs.Source = SomeNumbers;
-			MyCollectionView = cvs.View as CollectionView;
-			MyCollectionView.SortDescriptions.Add(new SortDescription(null, ListSortDirection.Descending));
+			ListSortingSample = new();
 		}
 	}
 }

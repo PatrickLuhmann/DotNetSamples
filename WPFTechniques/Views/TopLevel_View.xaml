@@ -13,8 +13,9 @@
         <vms:TopLevel_VM/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <CollectionViewSource Source="{Binding Path=SomeNumbers}" x:Key="listingDataView"/>
-        <CollectionViewSource Source="{Binding Path=MyCVS}" x:Key="someNumView2"/>
+        <DataTemplate x:Key="ListSortingTemplate">
+            <local:ListSorting_View/>
+        </DataTemplate>
 
         <!-- As expected, this style affects everything in this Window. -->
         <!-- If you want a style to affect the entire application, put it in app.xaml. -->
@@ -36,7 +37,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
 
         <TabControl Grid.Row="1">
@@ -61,35 +62,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="List Sorting">
-                <StackPanel Orientation="Horizontal">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <ListView Name="FirstListView" ItemsSource="{Binding SomeNumbers}"/>
-                            <ListView Name="SecondListView" ItemsSource="{Binding Source={StaticResource listingDataView}}"/>
-                            <ListView Name="ThirdListView" ItemsSource="{Binding MyCollectionView}"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid>
-                        <Grid.DataContext>
-                            <vms:Subclass_VM/>
-                        </Grid.DataContext>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Margin="5" Content="Add Number" Command="{Binding AddNumberCommand}"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
-                            <ListView ItemsSource="{Binding BaseNumbers}"/>
-                            <ListView ItemsSource="{Binding BaseNumbersCV}"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
+                <DockPanel>
+                    <UserControl Content="{Binding ListSortingSample}" ContentTemplate="{StaticResource ListSortingTemplate}"/>
+                </DockPanel>
             </TabItem>
         </TabControl>
 
