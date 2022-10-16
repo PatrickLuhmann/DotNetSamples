@@ -10,37 +10,37 @@ namespace WPFTechniques.Views
 {
 	public static class DialogBehavior
 	{
-		#region EditFoodItemDialogBox Behavior
-		private static EditFoodItemDialogBox_View CurrentEditFoodItemDialogBoxView;
+		#region BaseEditFoodItemDialogBox Behavior
+		private static EditFoodItemDialogBox_View CurrentBaseEditFoodItemDialogBoxView;
 
-		public static readonly DependencyProperty EditFoodItemDialogBoxProperty =
+		public static readonly DependencyProperty BaseEditFoodItemDialogBoxProperty =
 			DependencyProperty.RegisterAttached(
-				"EditFoodItemDialogBox",
+				"EditFoodItem", // the name of the property in the base class
 				typeof(object),
 				typeof(DialogBehavior),
-				new PropertyMetadata(null, OnEditFoodItemDialogBoxChanged));
+				new PropertyMetadata(null, OnBaseEditFoodItemDialogBoxChanged));
 
 		// Required Get for an attached property; name = "Get" + property name.
 		// The return type is known to be object because that is how we defined the property, above.
-		public static object GetEditFoodItemDialogBox(DependencyObject source)
+		public static object GetEditFoodItem(DependencyObject source)
 		{
-			return (object)source.GetValue(EditFoodItemDialogBoxProperty);
+			return (object)source.GetValue(BaseEditFoodItemDialogBoxProperty);
 		}
 
 		// Required Set for an attached property; name = "Set" + property name.
 		// The type of 'value' is known to be object because that is how we defined the property, above.
-		public static void SetEditFoodItemDialogBox(DependencyObject source, object value)
+		public static void SetEditFoodItem(DependencyObject source, object value)
 		{
-			source.SetValue(EditFoodItemDialogBoxProperty, value);
+			source.SetValue(BaseEditFoodItemDialogBoxProperty, value);
 		}
 
-		static void OnEditFoodItemDialogBoxChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
+		static void OnBaseEditFoodItemDialogBoxChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
 		{
-			// e.NewValue must be the EditFoodItemDialogBox_VM object that was created in SimpleCommand.Execute().
+			// e.NewValue must be the ???EditFoodItemDialogBox_VM object that was created in SimpleCommand.Execute().
 			if (e.NewValue == null)
 				return;
 
-			// Look in the resource dictionary for an item with the key of type EditFoodItemDialogBox_VM.
+			// Look in the resource dictionary for an item with the key of type ???EditFoodItemDialogBox_VM.
 			// This will return us a new object of type EditFoodItemDialogBox_View because that is what
 			// we put in the <Application.Resources> section of App.xaml.
 			var resource = Application.Current.TryFindResource(e.NewValue.GetType());
@@ -54,32 +54,31 @@ namespace WPFTechniques.Views
 				sdbvm.DialogClosing += (sender, args) =>
 				{
 					// POC
-					CurrentEditFoodItemDialogBoxView.Close();
+					CurrentBaseEditFoodItemDialogBoxView.Close();
 				};
 
 				// Callback for the Window is closing.
 				dlg.Closing += (sender, args) =>
 				{
 					// stuff
-					System.Diagnostics.Debug.WriteLine("Callback: SimpleDailogBox_View.Closing");
+					System.Diagnostics.Debug.WriteLine("Callback: EditFoodItemDialogBox_View.Closing");
 				};
 				// Callback for the Window is closed.
 				dlg.Closed += (sender, args) =>
 				{
 					// stuff
-					System.Diagnostics.Debug.WriteLine("Callback: SimpleDailogBox_View.Closed");
+					System.Diagnostics.Debug.WriteLine("Callback: EditFoodItemDialogBox_View.Closed");
 				};
 
 				// POC: Get the dialog to close without the collection handling from the sample.
 				//      This feels like a hack so even if it works, look for something better.
-				CurrentEditFoodItemDialogBoxView = dlg;
+				CurrentBaseEditFoodItemDialogBoxView = dlg;
 
 				// This assumes all dialogs are modal. Otherwise we would invoke Show().
 				dlg.Owner = App.Current.MainWindow;
 				dlg.ShowDialog();
 			}
 		}
-
 		#endregion
 
 		#region SimpleDialogBox Behavior
@@ -151,7 +150,6 @@ namespace WPFTechniques.Views
 				dlg.ShowDialog();
 			}
 		}
-
 		#endregion
 	}
 }

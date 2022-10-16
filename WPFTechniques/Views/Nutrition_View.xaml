@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WPFTechniques.Views"
              xmlns:myvms="clr-namespace:WPFTechniques.ViewModels"
              xmlns:corevms="clr-namespace:WPFTechniques_ViewModels;assembly=WPFTechniques_ViewModels"
-             local:DialogBehavior.EditFoodItemDialogBox="{Binding EditFoodItemDialogBox}"
+             local:DialogBehavior.EditFoodItem="{Binding EditFoodItem}"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance myvms:NutritionWPF_VM, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">

@@ -7,6 +7,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <views:SimpleDialogBox_View x:Key="{x:Type vms:SimpleDialogBox_VM}" x:Shared="False"/>
+        <!-- Note we are keying on the WPF VM class, not the base class. -->
         <views:EditFoodItemDialogBox_View x:Key="{x:Type vms:EditFoodItemDialogBox_VM}" x:Shared="False"/>
     </Application.Resources>
 </Application>
