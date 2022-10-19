@@ -69,6 +69,25 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
+            <!-- This panel is for displaying the ledger items. -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock  Grid.Row="0" HorizontalAlignment="Center">Ledger Items</TextBlock>
+                <Button     Grid.Row="1" Margin="5" Content="Add Ledger Item" Command="{Binding AddLedgerItemCommand}"/>
+                <DataGrid   Grid.Row="2" ItemsSource="{Binding LedgerItems}" CanUserSortColumns="False"/>
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Button Margin="5" Command="{Binding SortLedgerCommand}" CommandParameter="Id">Sort Id</Button>
+                    <Button Margin="5" Command="{Binding SortLedgerCommand}" CommandParameter="Name">Sort Name</Button>
+                    <Button Margin="5" Command="{Binding SortLedgerCommand}" CommandParameter="Date">Sort Date</Button>
+                    <Button Margin="5" Command="{Binding SortLedgerCommand}" CommandParameter="Value">Sort Value</Button>
+                    <Button Margin="5" Command="{Binding SortLedgerCommand}" CommandParameter="Quantity">Sort Qty</Button>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -26,12 +26,45 @@ namespace WPFTechniques.ViewModels
 		[ObservableProperty]
 		private CollectionView myCollectionView;
 
+		private Dictionary<string, int> LedgerSortState;
+
 		[RelayCommand]
 		private void MyAddNumber()
 		{
 			var rng = new Random(DateTime.Now.Millisecond);
 			int num = rng.Next(-10000, 10000);
 			myNumbers.Add(num);
+		}
+
+		[RelayCommand]
+		private void SortLedger(string field)
+		{
+			ListCollectionView lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(LedgerItems);
+
+			if (LedgerSortState[field] == 0)
+			{
+				// Not currently being sorted by this field, so sort
+				// it ASC and mark the others as being not sorted currently.
+				foreach (var entry in LedgerSortState.Keys.OfType<object>().ToArray())
+					LedgerSortState[(string)entry] = 0;
+				LedgerSortState[field] = 1;
+				lcv.CustomSort = new LedgerItemSorter(field, true);
+			}
+			else if (LedgerSortState[field] == 1)
+			{
+				// Currently being sorted ASC by this field, so sort it DESC.
+				LedgerSortState[field] = -1;
+				lcv.CustomSort = new LedgerItemSorter(field, false);
+			}
+			else if (LedgerSortState[field] == -1)
+			{
+				// Currently being sorted DESC by this field, so
+				// remove sorting altogether.
+				LedgerSortState[field] = 0;
+				lcv.CustomSort = null;
+			}
+			else
+				throw new ArgumentException("The value for this key is invalid.");
 		}
 
 		public ListSortingWPF_VM() : base()
@@ -64,6 +97,15 @@ namespace WPFTechniques.ViewModels
 			cvs2.Source = myNumbers;
 			myCollectionView = cvs2.View as CollectionView;
 			myCollectionView.SortDescriptions.Add(new SortDescription(null, ListSortDirection.Descending));
+
+			// Now for the LedgerItem collection. This is a more involved sorting sample.
+			LedgerSortState = new Dictionary<string, int>();
+			LedgerSortState.Add("Id", 0);
+			LedgerSortState.Add("Name", 0);
+			LedgerSortState.Add("Date", 0);
+			LedgerSortState.Add("Value", 0);
+			LedgerSortState.Add("Quantity", 0);
+			SortLedger("Id");
 		}
 	}
 }
