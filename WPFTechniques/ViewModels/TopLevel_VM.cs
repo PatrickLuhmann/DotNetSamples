@@ -39,26 +39,64 @@ namespace WPFTechniques.ViewModels
 		[ObservableProperty]
 		private int counter;
 
+		// "Old" implementation of Counter to show use of OnPropertyChanged().
+		private int _oldCounter;
+		public int OldCounter
+		{
+			get => _oldCounter;
+			set
+			{
+				_oldCounter = value;
+				OnPropertyChanged("OldCounter");
+			}
+		}
+
 		[ObservableProperty]
 		private SimpleDialogBox_VM? simpleDialogBox;
+
+		[ObservableProperty]
+		private List<int>? numbers = new();
+		
+		private ObservableCollection<int> _iEnumNumbers = new();
+		public IList<int> IEnumNumbers => _iEnumNumbers;
 
 		// This attribute generates the code for XxxCommand, which
 		// is what the XAML will bind to.
 		[RelayCommand]
-		private void IncrementCounter() => Counter++;
+		private void IncrementCounter()
+		{
+			Counter++;
+			OldCounter++;
+		}
 
 		[RelayCommand]
-		private void DecrementCounter() => Counter--;
+		private void DecrementCounter()
+		{
+			// If we use the "backing" object then we must explicitly notify.
+			counter--;
+			OnPropertyChanged("Counter");
+			_oldCounter--;
+			OnPropertyChanged("OldCounter");
+		}
 
 		[RelayCommand]
 		private void ModifyByTen(string dir)
 		{
 			if (dir == "INC")
+			{
 				Counter += 10;
+				OldCounter += 10;
+			}
 			else if (dir == "DEC")
+			{
 				Counter -= 10;
+				OldCounter -= 10;
+			}
 			else
+			{
 				Counter = 0;
+				OldCounter = 0;
+			}
 		}
 
 		[RelayCommand]
@@ -84,10 +122,46 @@ namespace WPFTechniques.ViewModels
 			// Set this to null so that it doesn't pop up again unexpectedly.
 			SimpleDialogBox = null;
 		}
+
+		[RelayCommand]
+		private void AddNumberToList(object param)
+		{
+			// This is what you have to deal with when using
+			// something other than ObservableCollection.
+
+			numbers?.Add(Counter);
+			// This doesn't work as expected; I assume because the collection
+			// reference hasn't changed (i.e. the "pointer address" is the same
+			// value regardless of what has happened inside the collection) and
+			// there is a check for such a change.
+			//OnPropertyChanged("Numbers");
+			
+			// We need to change the collection reference itself. This works
+			// just the same as if we had changed an int that was declared
+			// with the ObservableProperty attribute.
+			var temp = Numbers;
+			Numbers = null;
+			Numbers = temp;
+
+			// Try something closer to a sample I found.
+			IEnumNumbers.Add(Counter);
+			// No need for explicit call when using ObservableCollection,
+			// even if the public property is not explicitly OC.
+			//OnPropertyChanged("IEnumNumbers");
+		}
+
 		public TopLevel_VM()
 		{
 			ListSortingSample = new();
 			NutritionSample = new();
+
+			Numbers?.Add(1);
+			Numbers?.Add(2);
+			Numbers?.Add(3);
+			_iEnumNumbers.Add(10);
+			_iEnumNumbers.Add(20);
+			_iEnumNumbers.Add(30);
+
 		}
 	}
 }
