@@ -45,6 +45,298 @@
         <TextBlock Grid.Row="0" Text="{Binding Salutation}"/>
 
         <TabControl Grid.Row="1">
+            <TabItem Header="Triggers Are Wonderful Things">
+                <TabItem.Resources>
+                    <!-- Specify the x:Key in StaticResource in Style property. -->
+                    <Style x:Key="VisibleForB" TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item B">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- Specify the x:Key in StaticResource in Style property. -->
+                    <Style x:Key="PinkBackground" TargetType="Button">
+                        <Setter Property="OverridesDefaultStyle" Value="True"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Name="border" 
+                            BorderThickness="1"
+                            Padding="4,2" 
+                            BorderBrush="DarkGray" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="BorderBrush" Value="Black" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <!-- This is our normal/default Background. -->
+                        <Setter Property="Background" Value="HotPink"/>
+                        <Setter Property="Foreground" Value="Yellow"/>
+                        <Style.Triggers>
+                            <!-- This is what happens when the mouse is over the control. -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="Green"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- Specify the x:Key in StaticResource in Style property. -->
+                    <Style x:Key="BlueAndYellow" TargetType="Button">
+                        <!-- This is our normal appearance. -->
+                        <Setter Property="Background" Value="Blue"/>
+                        <Setter Property="Foreground" Value="Yellow"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <!-- The trigger can go here as well. I do not know the difference, or which is preferred.
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Green"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        -->
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <!-- This is what happens when the mouse is over the control. -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="Green"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- This code was obtained by right-clicking on a "bare" Button and selecting Edit Template / Edit a Copy...
+                         From here we can change just the things we want, and the rest will have the default value.
+                    -->
+                    <Style x:Key="FocusVisual">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="2" StrokeDashArray="1 2" SnapsToDevicePixels="true" StrokeThickness="1" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+                    <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+                    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFFFE0E0"/>
+                    <!-- Was #FFBEE6FD (light blue) -->
+                    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+                    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+                    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+                    <SolidColorBrush x:Key="Button.Disabled.Background" Color="DarkRed"/>
+                    <SolidColorBrush x:Key="Button.Disabled.Border" Color="Silver"/>
+                    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="PaleVioletRed"/>
+                    <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
+                                        <ContentPresenter Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsDefaulted" Value="true">
+                                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="true">
+                                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=btn, Path=IsMouseOver}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style x:Key="StackTest1" TargetType="StackPanel">
+                        <!-- This is our normal appearance. -->
+                        <Setter Property="Background" Value="Blue"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Style.Triggers>
+                            <!-- This is what happens when the mouse is over the control. -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Green"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </TabItem.Resources>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button Style="{StaticResource PinkBackground}" Content="Mouse Over Me To Change My Style"/>
+                        <Button Style="{StaticResource BlueAndYellow}" Content="Touch Me To See Who Is Better"/>
+                        <Button Style="{DynamicResource ButtonStyle1}" Background="Bisque" Content="Style Copied From Default"/>
+                        <Button>Default style</Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <ComboBox Name="combo1" Margin="5" ItemsSource="{Binding ComboList1}" SelectedItem="{Binding SelectedCombo1}"></ComboBox>
+                        <TextBlock Margin="5" Text="Selected A">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item A">
+                                            <Setter Property="Background" Value="BlanchedAlmond"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Margin="5" Text="Selected B">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item B">
+                                            <Setter Property="Background" Value="LightCoral"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Margin="5" Text="Selected C">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item C">
+                                            <Setter Property="Background" Value="SkyBlue"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item A">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock>Line A1</TextBlock>
+                        <TextBlock>Line A2</TextBlock>
+                        <TextBlock>Line A3</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Style="{StaticResource VisibleForB}" Grid.Row="2" Orientation="Vertical">
+                        <TextBlock>Line B1</TextBlock>
+                        <TextBlock>Line B2</TextBlock>
+                        <TextBlock>Line B3</TextBlock>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Vertical">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=combo1}" Value="Item C">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5">Date:</TextBlock>
+                                <TextBox Margin="5" Text="{Binding CDate}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5">Quantity:</TextBlock>
+                                <TextBox Margin="5" Text="{Binding CQuantity}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5">Amount:</TextBlock>
+                                <TextBox Margin="5" Text="{Binding CAmount}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <TextBlock>
+                    <Run Text="CDate: "/>
+                    <Run Text="{Binding CDate}"/>
+                            </TextBlock>
+                            <TextBlock>
+                    <Run Text="CQuantity: "/>
+                    <Run Text="{Binding CQuantity}"/>
+                            </TextBlock>
+                            <TextBlock>
+                    <Run Text="CAmount: "/>
+                    <Run Text="{Binding CAmount}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="3">
+                        <Button Width="100" Height="30" Content="Hover Over Me" Name="btn"/>
+                        <Button Width="100" Height="30" Content="Content">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=btn, Path=IsMouseOver}" Value="True">
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+            </TabItem>
             <TabItem Header="Button Commands">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -66,7 +358,7 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <StackPanel Orientation="Vertical">
                             <TextBlock>Property: Numbers</TextBlock>
-                            <ListView ItemsSource="{Binding Numbers}">
+                            <ListView Name="List1" ItemsSource="{Binding Numbers}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -80,13 +372,34 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
                             <TextBlock>Property: IEnumNumbers</TextBlock>
-                            <ListView ItemsSource="{Binding IEnumNumbers}">
+                            <ListView ItemsSource="{Binding IEnumNumbers}" SelectedItem="{Binding SelectedNumber}">
+                                <ListView.Style>
+                                    <Style TargetType="{x:Type ListView}">
+                                        <Setter Property="Foreground" Value="Salmon"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=List1, Path=IsMouseOver}" Value="True">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.Style>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="5">Value:</TextBlock>
                                             <TextBlock Margin="5" Text="{Binding}"/>
                                             <Button Margin="5" Command="{Binding Path=DataContext.AddNumberToListCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">Click Me!</Button>
+                                            <Button Name="TestButton" Margin="5" Content="Test" Command="{Binding Path=DataContext.AddNumberToListCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ListView}}}" CommandParameter="{Binding .}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                                                <Setter Property="Background" Value="Red"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

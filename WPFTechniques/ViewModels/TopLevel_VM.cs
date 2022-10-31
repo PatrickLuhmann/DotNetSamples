@@ -29,6 +29,19 @@ namespace WPFTechniques.ViewModels
 	{
 		public string Salutation { get; set; } = "Welcome to TopLevel_VM";
 
+		#region Trigger Sample items
+		[ObservableProperty]
+		private List<string> comboList1;
+		[ObservableProperty]
+		private string selectedCombo1;
+		[ObservableProperty]
+		private string cDate;
+		[ObservableProperty]
+		private string cQuantity;
+		[ObservableProperty]
+		private string cAmount;
+		#endregion
+
 		public ListSortingWPF_VM ListSortingSample { get; set; }
 		public NutritionWPF_VM NutritionSample { get; set; }
 
@@ -59,6 +72,9 @@ namespace WPFTechniques.ViewModels
 		
 		private ObservableCollection<int> _iEnumNumbers = new();
 		public IList<int> IEnumNumbers => _iEnumNumbers;
+
+		[ObservableProperty]
+		private int selectedNumber;
 
 		// This attribute generates the code for XxxCommand, which
 		// is what the XAML will bind to.
@@ -154,6 +170,14 @@ namespace WPFTechniques.ViewModels
 		{
 			ListSortingSample = new();
 			NutritionSample = new();
+
+			ComboList1 = new List<string>
+			{
+				"Item A",
+				"Item B",
+				"Item C",
+			};
+			SelectedCombo1 = ComboList1[0];
 
 			Numbers?.Add(1);
 			Numbers?.Add(2);
