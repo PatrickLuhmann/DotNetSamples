@@ -44,6 +44,7 @@ namespace WPFTechniques.ViewModels
 
 		public ListSortingWPF_VM ListSortingSample { get; set; }
 		public NutritionWPF_VM NutritionSample { get; set; }
+		public ListProcessingWPF_VM ListProcessingSample { get; set; }
 
 		// This attribute only generates the source for the property. It depends
 		// on the INotifyPropertyChanged infrastructure. Provide that either
@@ -170,6 +171,7 @@ namespace WPFTechniques.ViewModels
 		{
 			ListSortingSample = new();
 			NutritionSample = new();
+			ListProcessingSample = new();
 
 			ComboList1 = new List<string>
 			{

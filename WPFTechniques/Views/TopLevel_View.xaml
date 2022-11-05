@@ -20,6 +20,9 @@
         <DataTemplate x:Key="NutritionTemplate">
             <local:Nutrition_View/>
         </DataTemplate>
+        <DataTemplate x:Key="ListProcessingTemplate">
+            <local:ListProcessing_View/>
+        </DataTemplate>
 
         <!-- As expected, this style affects everything in this Window. -->
         <!-- If you want a style to affect the entire application, put it in app.xaml. -->
@@ -342,6 +345,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -415,6 +419,9 @@
             </TabItem>
             <TabItem Header="Nutrition">
                 <UserControl Content="{Binding NutritionSample}" ContentTemplate="{StaticResource NutritionTemplate}" />
+            </TabItem>
+            <TabItem Header="List Processing">
+                <UserControl Content="{Binding ListProcessingSample}" ContentTemplate="{StaticResource ListProcessingTemplate}"/>
             </TabItem>
         </TabControl>
 
