@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="blazor_cc/blazor_cc.csproj" />
+  <Project Path="DotNetSamples/DotNetSamples.csproj" />
+  <Project Path="Nutrition/Nutrition.csproj" />
+  <Project Path="WPFTechniques/WPFTechniques.csproj" />
+  <Project Path="WPFTechniques_ViewModels/WPFTechniques_ViewModels.csproj" />
+</Solution>
