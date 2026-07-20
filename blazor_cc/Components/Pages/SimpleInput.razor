@@ -1,0 +1,51 @@
+﻿@page "/simpleinput"
+@rendermode InteractiveServer
+
+<PageTitle>SimpleInput</PageTitle>
+
+<h1>Simple Input component</h1>
+
+@* Private fields and methods are accessible. *@
+<input @onchange="InputChanged" />
+<p/>
+<p>@_message</p>
+
+@* We can define onclick inline using a lamda expression. *@
+<input @bind="_text" />
+<button @onclick="() => _text = string.Empty">Clear Text Field</button>
+<p>@_text</p>
+
+@* We can access a object as well as a simple type. *@
+<input @bind="_myObject.MyNumber" />
+<button @onclick="() => _myObject.MyNumber = 0">Zero Number Field</button>
+<p>@_myObject.MyNumber</p>
+
+@code {
+	string _message = "This is the input message.";
+
+	void InputChanged(ChangeEventArgs e)
+	{
+		if (e.Value is null)
+            // Note: A blank input field is not null.
+			_message = "I see no input.";
+        else if ((string)e.Value == string.Empty)
+	        _message = "Why won't you talk to me?";
+		else
+			_message = (string)e.Value;
+	}
+
+	string _text = "";
+
+	private class MyTestClass
+	{
+        // To access the fields in the page, they need to be public.
+        // The page has no special rights to the contents of this class.
+        // As with the top-level fields (like _message), they do not need
+        // to be properties.
+		public int MyNumber;
+	}
+
+    // The object itself doesn't need to change after it is created
+    // when the component is loaded.
+	private readonly MyTestClass _myObject = new();
+}

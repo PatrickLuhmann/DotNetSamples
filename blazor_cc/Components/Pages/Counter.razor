@@ -5,15 +5,69 @@
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">Current count: @_currentCount</p>
+<p>Increment amount: @IncrementAmount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+@* Within the "page" section, plain text can be used. *@
+<p>
+	Status: 
+	@if (_currentCount == (BadNumber - 1))
+	{
+		@*
+		  Within a code block, plain text is no longer allowed.
+		  Here are several ways to display text, and how it relates to the
+		  text previously displayed.
+		*@
+		<text>Watch out for @BadNumber!</text> @* OUTPUT: On same line as Status: *@
+
+		@if (false)
+		{
+			@* The tooltip for span says it should be used as a last resort. *@
+			<span>Watch out for @BadNumber!</span> @* OUTPUT: On same line as Status: *@
+			@* An online guide says @: is an alternate for span. *@
+			@:Watch out for @BadNumber!@* OUTPUT: On same line as Status: *@
+			@* This is the standard paragraph element. *@
+			<p>Watch out for @BadNumber!</p> @* OUTPUT: On a new line. *@
+		}
+	}
+	else
+	{
+		<text>Nominal</text>
+	}
+</p>
+
+@* Here are some buttons defining the onclick event, as either a method call or lambda expression. *@
+<button class="btn btn-primary" @onclick="() => { ModifyCount(-10); }">Dec 10</button>
+<button class="btn btn-primary" @onclick="DecrementCount">Dec @IncrementAmount</button>
+<button class="btn btn-primary" @onclick="IncrementCount">Inc @IncrementAmount</button>
+<button class="btn btn-primary" @onclick="() => { ModifyCount(10); }">Inc 10</button>
+
+<SimpleInput></SimpleInput>
 
 @code {
-    private int currentCount = 0;
+	private int _currentCount;
+	private const int BadNumber = 7;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+    // The Parameter attribute means this can be set when another
+    // component references this one.
+	[Parameter]
+	public int IncrementAmount { get; set; } = 1;
+
+	[Parameter]
+	public int SomethingElse { get; set; }
+
+	private void IncrementCount()
+	{
+		_currentCount += IncrementAmount;
+	}
+
+	private void DecrementCount()
+	{
+		_currentCount -= IncrementAmount;
+	}
+
+	private void ModifyCount(int value)
+	{
+		_currentCount += value;
+	}
 }
