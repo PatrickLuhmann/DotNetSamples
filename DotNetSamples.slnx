@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/TaxTools/">
+    <Project Path="TaxTools/TaxTools.Tests/TaxTools.Tests.csproj" />
+    <Project Path="TaxTools/TaxTools/TaxTools.csproj" />
+  </Folder>
   <Project Path="blazor_cc/blazor_cc.csproj" />
   <Project Path="DotNetSamples/DotNetSamples.csproj" />
   <Project Path="Nutrition/Nutrition.csproj" />
