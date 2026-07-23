@@ -1,0 +1,187 @@
+﻿@page "/taxhelper"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.ComponentModel.DataAnnotations
+@using TaxTools
+
+<PageTitle>TaxHelper</PageTitle>
+
+<h1>Tax Helper component</h1>
+
+<h2>Raw CSS Version</h2>
+<EditForm class="pjl-uniform-form" method="post" Model="MyInput" OnValidSubmit="GetWorksheet" FormName="UserInput"
+          Enhance>
+	<DataAnnotationsValidator/>
+	<ValidationSummary class="text-danger" role="alert"/>
+	<div class="pjl-form-row2">
+		<label for="qualdiv1">Qualified Dividends</label>
+		<InputNumber id="qualdiv1" @bind-Value="MyInput.QualifiedDividends"/>
+		<ValidationMessage For="() => MyInput.QualifiedDividends"/>
+	</div>
+	<div class="pjl-form-row2">
+		<label for="longgains1">Long Term Capital Gains</label>
+		<InputNumber id="longgains1" @bind-Value="MyInput.LongTermCaptialGains"/>
+		<ValidationMessage For="() => MyInput.LongTermCaptialGains"/>
+	</div>
+	<div class="pjl-form-row2">
+		<label for="orddiv1">Ordinary Dividends</label>
+		<InputNumber id="orddiv1" @bind-Value="MyInput.OrdinaryDividends"/>
+		<ValidationMessage For="() => MyInput.OrdinaryDividends"/>
+	</div>
+	<div class="pjl-form-row2">
+		<label for="shortgains1">Short Term Capital Gains</label>
+		<InputNumber id="shortgains1" @bind-Value="MyInput.ShortTermCapitalGains"/>
+		<ValidationMessage For="() => MyInput.ShortTermCapitalGains"/>
+	</div>
+	<div class="pjl-form-row2">
+		<label for="otherord1">Other Ordinary Income</label>
+		<InputNumber id="otherord1" @bind-Value="MyInput.OtherOrdinaryIncome"/>
+		<ValidationMessage For="() => MyInput.OtherOrdinaryIncome"/>
+	</div>
+	<div class="pjl-form-row2">
+		<label for="taxperiod1">Tax Period (1 - 4)</label>
+		<InputNumber id="taxperiod1" @bind-Value="MyInput.TaxPeriod"/>
+		<ValidationMessage For="() => MyInput.TaxPeriod"/>
+	</div>
+	@* btn-primary makes it blue and btn gives it rounded corners. *@
+	<button class="btn btn-primary" type="submit">Submit!</button>
+</EditForm>
+
+<h2>Bootstrap CSS Version</h2>
+<EditForm class="container mt-4" method="post" Model="MyInput" OnValidSubmit="GetWorksheet" FormName="UserInput"
+          Enhance>
+	<DataAnnotationsValidator/>
+	<ValidationSummary class="text-danger" role="alert"/>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="qualdiv2">Qualified Dividends</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="qualdiv2" @bind-Value="MyInput.QualifiedDividends"/>
+		</div>
+		<ValidationMessage For="() => MyInput.QualifiedDividends"/>
+	</div>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="longgains2">Long Term Capital Gains</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="longgains2" @bind-Value="MyInput.LongTermCaptialGains"/>
+		</div>
+		<ValidationMessage For="() => MyInput.LongTermCaptialGains"/>
+	</div>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="orddiv2">Ordinary Dividends</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="orddiv2" @bind-Value="MyInput.OrdinaryDividends"/>
+		</div>
+		<ValidationMessage For="() => MyInput.OrdinaryDividends"/>
+	</div>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="shortgains2">Short Term Capital Gains</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="shortgains2" @bind-Value="MyInput.ShortTermCapitalGains"/>
+		</div>
+		<ValidationMessage For="() => MyInput.ShortTermCapitalGains"/>
+	</div>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="otherord2">Other Ordinary Income</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="otherord2" @bind-Value="MyInput.OtherOrdinaryIncome"/>
+		</div>
+		<ValidationMessage For="() => MyInput.OtherOrdinaryIncome"/>
+	</div>
+	<div class="mb-3 row">
+		<label class="col-sm-3 col-form-label" for="taxperiod2">Tax Period (1 - 4)</label>
+		<div class="col-sm-9">
+			<InputNumber class="form-control" id="taxperiod2" @bind-Value="MyInput.TaxPeriod"/>
+		</div>
+		<ValidationMessage For="() => MyInput.TaxPeriod"/>
+	</div>
+	<div class="row">
+		<div class="offset-sm-3">
+			@* btn-primary makes it blue and btn gives it rounded corners. *@
+			<button class="btn btn-primary" type="submit">Submit!</button>
+		</div>
+	</div>
+</EditForm>
+
+<h2>Qualified Dividends And Capital Gains Worksheet</h2>
+
+@* Display the lines of the worksheet via a QuickGrid component. *@
+<QuickGrid Items="@DisplayLines2">
+	<PropertyColumn Property="@(dl => dl.Number)"/>
+	<PropertyColumn Property="@(dl => dl.Amount)"/>
+</QuickGrid>
+
+@code {
+	public class FormLine
+	{
+		// NOTE: A line may contain a letter (EX: Line 13b) so this must be a string.
+		public string Number { get; set; } = string.Empty;
+
+		// When an amount makes it to a form, it is rounded, and thus an integer.
+		public int Amount { get; set; }
+	}
+
+	public class UserInputs
+	{
+		[Range(0, 999999999)]
+		public decimal QualifiedDividends { get; set; }
+
+		// TODO: Can this be negative? If so, can it be less than -3000?
+		// TODO: Or does the "max" capital loss rule come after net gains has been calculated?
+		public decimal LongTermCaptialGains { get; set; }
+
+		[Range(0, 999999999)]
+		public decimal OrdinaryDividends { get; set; }
+
+		// TODO: See LTCG for range info.
+		public decimal ShortTermCapitalGains { get; set; }
+
+		[Range(0, 999999999)]
+		public decimal OtherOrdinaryIncome { get; set; }
+
+		[Range(1, 4)]
+		public int TaxPeriod { get; set; } = 4;
+	}
+
+	UserInputs MyInput { get; init; } = new();
+
+	// This is what I get from the TaxForm method.
+	Dictionary<string, int> _form1 = new();
+
+	// This is what I give to the QuickGrid to be displayed.
+	IQueryable<FormLine> DisplayLines2 => _form1.Select(l => new FormLine
+		{
+			Number = l.Key,
+			Amount = l.Value,
+		})
+		.AsQueryable();
+
+    // Real work likely requires an 'async' method and a 'Task' return type.
+	void GetWorksheet()
+	{
+		// TODO: This code is copied from the console app. Surely there is a better way.
+
+		// TODO: Add Tax Period to the EditForm and put validation in place there.
+		decimal annualizationFactor = 1;
+
+		// For Line 1, assume that Lines 33 - 43 are 0 (i.e. no self-employment income).
+		// NOTE: We are rounding before annualizing because we don't put decimal values on a worksheet.
+		int aetwLine1 = TaxCalculations.Round(MyInput.QualifiedDividends
+		                              + MyInput.LongTermCaptialGains + MyInput.OrdinaryDividends
+		                              + MyInput.ShortTermCapitalGains + MyInput.OtherOrdinaryIncome);
+
+		int aetwLine3 = TaxCalculations.Round(aetwLine1 * annualizationFactor);
+
+		// TODO: Assume standard deduction for single filer; add support for other options.
+		int aetwLine11 = aetwLine3 - 16100;
+
+		int line1 = aetwLine11;
+		int line2 = TaxCalculations.Round(MyInput.QualifiedDividends * annualizationFactor);
+		// TODO: Assumes long-term gain, and long-term gain more than compensates for short-term loss.
+		int line3 = (int)Math.Min(MyInput.LongTermCaptialGains * annualizationFactor,
+			(MyInput.ShortTermCapitalGains + MyInput.LongTermCaptialGains)
+			* annualizationFactor);
+
+		_form1 = TaxForms.EstimatedQualDivCapGainWorksheet(line1, line2, line3);
+	}
+}
