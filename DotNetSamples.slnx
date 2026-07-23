@@ -4,6 +4,7 @@
     <Project Path="TaxTools/TaxTools/TaxTools.csproj" />
   </Folder>
   <Project Path="blazor_cc/blazor_cc.csproj" />
+  <Project Path="console_cc/console_cc.csproj" />
   <Project Path="DotNetSamples/DotNetSamples.csproj" />
   <Project Path="Nutrition/Nutrition.csproj" />
   <Project Path="WPFTechniques/WPFTechniques.csproj" />

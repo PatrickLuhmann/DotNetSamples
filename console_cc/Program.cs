@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using DotNetSamples;
-using DotNetSamples.Nutrition_Sample;
+﻿using ConsoleCC;
 
 Console.WriteLine("Welcome to .NET Samples!");
 
@@ -11,14 +9,19 @@ while (!quit)
 
 	Console.WriteLine("1. Nutrtion database app");
 
+	Console.WriteLine("2. Tax Helper app");
+
 	Console.WriteLine("Q. Quit");
 
 	string? input = Console.ReadLine();
-	IConsoleSample sample = null;
+	IConsoleSample? sample = null;
 	switch (input?.ToLower())
 	{
 		case "1":
 			sample = new NutritionSample();
+			break;
+		case "2":
+			sample = new TaxHelperSample();
 			break;
 		case "q":
 			quit = true;
@@ -27,6 +30,8 @@ while (!quit)
 			Console.WriteLine("ERROR: Input not recognized.");
 			break;
 	}
-	if (sample != null)
-		sample.Run();
+
+	sample?.Run();
 }
+
+Console.WriteLine("Thank you for trying .NET Samples!");
