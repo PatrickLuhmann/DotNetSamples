@@ -1,0 +1,73 @@
+@page "/todo"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<PageTitle>Todo</PageTitle>
+
+<h1>Todo List Sample</h1>
+
+<p>The number of items in the list: @_todos.Count</p>
+<p>The number of items remaining to do: @_todos.Count(todo => !todo.IsDone)</p>
+
+<h2>Add a new item to the list</h2>
+
+<input @bind="_newTodo"/>
+@* onclick will not be triggered if the input is empty. *@
+<button @onclick="AddTodo">Add (method)</button>
+@* This is not the case with the lambda expression, so explicitly handle that case. *@
+<button @onclick="() => { if (string.IsNullOrEmpty(_newTodo)) return; _todos.Add(new TodoItem() { Title = _newTodo }); _newTodo = string.Empty; }">Add (lambda)</button>
+
+<p>A list built using foreach</p>
+<ul>
+	@foreach (var todo in _todos)
+	{
+		<li>
+			<input type="checkbox" @bind="todo.IsDone"/>
+			<input @bind="todo.Title"/>
+		</li>
+	}
+</ul>
+
+<p>Using a QuickGrid to display the list.</p>
+<QuickGrid TGridItem="TodoItem" Items="@QuickTodos">
+	<PropertyColumn Property="@(t => t.Title)"/>
+	<PropertyColumn Property="@(t => t.IsDone)"/>
+</QuickGrid>
+
+@* When the element is a built-in type, just refer to itself. *@
+@* Since there is no type name, there will be no automatic column header.*@
+@* We must provide one explicitly if we want one.*@
+@* NOTE: QuickGrid requires every item to be unique. This works fine for
+   class items, but not for a basic type like string. An exception will be
+   thrown if there are two strings in the list that are the same. Of course
+   we could add input validation to reject duplicates. *@
+<p>Now just the titles in a QuickGrid.</p>
+<QuickGrid Items="@JustTitles">
+	<PropertyColumn Property="@(t => t)" Title="Just The Text, Ma'am"/>
+	<PropertyColumn Property="@(t => t)"/>
+</QuickGrid>
+
+@code {
+
+	// For basic elements, a List is fine.
+	List<TodoItem> _todos = [];
+
+	// QuickGrid requires an IQueryable<> object, so create one.
+	IQueryable<TodoItem> QuickTodos => _todos.AsQueryable();
+
+	// Break it down to just the Title.
+	IQueryable<string> JustTitles => _todos.Select(t => $"{t.Title}").AsQueryable();
+
+	string _newTodo = "";
+
+	void AddTodo()
+	{
+		if (!string.IsNullOrWhiteSpace(_newTodo))
+		{
+			_todos.Add(new TodoItem { Title = _newTodo });
+			_newTodo = string.Empty;
+		}
+	}
+
+}
