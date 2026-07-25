@@ -4,6 +4,8 @@
 ## EFCore puts the database file in the project, but I don't like having it in the repo.
 ## It should get recreated if it is not there (i.e. after a clone of the repo).
 *.db
+*.db-shm
+*.db-wal
 ## I can't think of a reason to store a directory link.
 *.lnk
 

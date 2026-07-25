@@ -1,0 +1,85 @@
+@page "/movies"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using BlazorWebAppMovies.Models
+@implements IAsyncDisposable
+@inject IDbContextFactory<BlazorWebAppMoviesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+
+<p>
+	<a href="movies/create">Create New</a>
+</p>
+
+<p>This table uses only HTTP requests from client to server.</p>
+<div>
+	<form action="/movies" data-enhance data-permanent>
+		<input type="search" name="titleFilter"/>
+		<input type="submit" value="Search"/>
+	</form>
+	<QuickGrid Class="table" Items="FilteredMovies" Pagination="_pagination">
+		<PropertyColumn Property="movie => movie.Title" Sortable="true"/>
+		<PropertyColumn Property="movie => movie.ReleaseDate" Title="Release Date"/>
+		<PropertyColumn Property="movie => movie.Genre"/>
+		<PropertyColumn Property="movie => movie.Price"/>
+		<PropertyColumn Property="movie => movie.Rating"/>
+
+		<TemplateColumn Context="movie">
+			<a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
+			<a href="@($"movies/details?id={movie.Id}")">Details</a> |
+			<a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+		</TemplateColumn>
+	</QuickGrid>
+	<Paginator State="_pagination"/>
+</div>
+
+<p>This table uses interactive features for filtering.</p>
+<div>
+	<input type="search" @bind="_interactiveTitleFilter" @bind:event="oninput"/>
+	<QuickGrid Class="table" Items="InteractiveFilteredMovies" Pagination="_interactivePagination">
+		<PropertyColumn Property="movie => movie.Title" Sortable="true"/>
+		<PropertyColumn Property="movie => movie.ReleaseDate" Title="Release Date"/>
+		<PropertyColumn Property="movie => movie.Genre"/>
+		<PropertyColumn Property="movie => movie.Price"/>
+		<PropertyColumn Property="movie => movie.Rating"/>
+
+		<TemplateColumn Context="movie">
+			<a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
+			<a href="@($"movies/details?id={movie.Id}")">Details</a> |
+			<a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+		</TemplateColumn>
+	</QuickGrid>
+	<Paginator State="_interactivePagination"/>
+</div>
+
+@code {
+	private BlazorWebAppMoviesContext context = default!;
+
+	// Static SSR
+	[SupplyParameterFromQuery] private string? TitleFilter { get; set; }
+
+	private IQueryable<Movie> FilteredMovies =>
+		context.Movie.Where(m => m.Title!.Contains(TitleFilter ?? string.Empty));
+
+	private PaginationState _pagination = new PaginationState { ItemsPerPage = 4 };
+
+	// Interactive SignalR
+	private string _interactiveTitleFilter = string.Empty;
+
+	private IQueryable<Movie> InteractiveFilteredMovies =>
+		context.Movie.Where(m => m.Title!.Contains(_interactiveTitleFilter));
+
+	private PaginationState _interactivePagination = new PaginationState { ItemsPerPage = 3 };
+
+	protected override void OnInitialized()
+	{
+		context = DbFactory.CreateDbContext();
+	}
+
+	public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

@@ -1,0 +1,62 @@
+@page "/movies/details"
+@using Microsoft.EntityFrameworkCore
+@using BlazorWebAppMovies.Models
+@inject IDbContextFactory<BlazorWebAppMoviesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+	<h2>Movie</h2>
+	<hr/>
+	@if (_movie is null)
+	{
+		<p>
+			<em>Loading...</em>
+		</p>
+	}
+	else
+	{
+		@* dl = Description List https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl *@
+		<dl class="row">
+			@* dt = Description-List Term *@
+			<dt class="col-sm-2">Title</dt>
+			@* dd = Description-List Description *@
+			<dd class="col-sm-10">@_movie.Title</dd>
+			<dt class="col-sm-2">Release Date</dt>
+			<dd class="col-sm-10">@_movie.ReleaseDate</dd>
+			<dt class="col-sm-2">Genre</dt>
+			<dd class="col-sm-10">@_movie.Genre</dd>
+			<dt class="col-sm-2">Price</dt>
+			<dd class="col-sm-10">@_movie.Price</dd>
+			<dt class="col-sm-2">Rating</dt>
+			<dd class="col-sm-10">@_movie.Rating</dd>
+		</dl>
+		<div>
+			<a href="@($"/movies/edit?id={_movie.Id}")">Edit</a> |
+			<a href="@($"/movies")">Back to List</a>
+		</div>
+	}
+</div>
+
+@code {
+	private Movie? _movie;
+
+	[SupplyParameterFromQuery] private int Id { get; set; }
+
+	// This method is executed when the component loads.
+	protected override async Task OnInitializedAsync()
+	{
+		using var context = DbFactory.CreateDbContext();
+		_movie = await context.Movie.FirstOrDefaultAsync(m => m.Id == Id);
+
+		if (_movie is null)
+		{
+			// This displays the NotFound.razor page; see Program.cs for registering "not-found".
+			NavigationManager.NotFound();
+		}
+	}
+
+}
