@@ -1,0 +1,78 @@
+﻿@page "/selectlist"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>SelectList</PageTitle>
+
+<h1>Select List component</h1>
+
+<h2>Basic select and option usage</h2>
+
+<select name="selectlist1">
+	<option value="">Select a number</option>
+	<option value="1">One</option>
+	<option value="2">Two</option>
+	<option value="3">Three</option>
+</select>
+<p></p>
+<select @bind="_selectedOption">
+	@foreach (var option in _options)
+	{
+		<option value="@option">@option</option>
+	}
+</select>
+<p>You selected: @_selectedOption</p>
+
+<h2>InputSelect from a Microsoft example</h2>
+
+<EditForm Model="Model1" OnValidSubmit="SubmitMethod" FormName="FormModel1">
+	<DataAnnotationsValidator/>
+	<ValidationSummary/>
+	<div>
+		<label>
+			Primary Classification:
+			<InputSelect @bind-Value="Model1!.Classification">
+				<option value="">Select classification...</option>
+				<option checked="@(Model1!.Classification == "First")" value="First">First</option>
+				<option checked="@(Model1!.Classification == "Second")" value="Second">Second</option>
+				<option checked="@(Model1!.Classification == "Third")" value="Third">Third</option>
+				<option value="Fourth">4th</option>
+			</InputSelect>
+		</label>
+		<ValidationMessage For="() => Model1.Classification"/>
+	</div>
+	<button type="submit">submit</button>
+	<button type="reset">reset</button>
+</EditForm>
+<p>Hello @Model1?.Classification</p>
+<p>@_messageFM1</p>
+
+@code {
+	string _selectedOption = "blank";
+	List<string> _options = new List<string> { "Option 1", "Option 2", "Option 3" };
+
+	public class TestClass1
+	{
+		[Required] public string? Classification { get; set; }
+	}
+
+	[SupplyParameterFromForm] private TestClass1? Model1 { get; set; }
+	int _counterFM1 = 0;
+	string _messageFM1 = "xtor";
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		Model1 ??= new() { Classification = "Third" };
+	}
+
+	private void SubmitMethod()
+	{
+		_counterFM1++;
+		_messageFM1 = $@"Submit number {_counterFM1}";
+	}
+
+}
