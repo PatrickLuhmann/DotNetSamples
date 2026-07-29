@@ -40,6 +40,16 @@
 		<ValidationMessage For="() => MyInput.OtherOrdinaryIncome"/>
 	</div>
 	<div class="pjl-form-row2">
+		<label for="taxperiod1-s">Tax Period</label>
+		<InputSelect id="taxperiod1-s" @bind-Value="MyInput.TaxPeriod">
+			<option value="1">Period 1 (Jan - Mar)</option>
+			<option value="2">Period 2 (Jan - May)</option>
+			<option value="3">Period 3 (Jan - Aug)</option>
+			<option value="4">Period 4 (Jan - Dec)</option>
+		</InputSelect>
+		<ValidationMessage For="() => MyInput.TaxPeriod"/>
+	</div>
+	<div class="pjl-form-row2">
 		<label for="taxperiod1">Tax Period (1 - 4)</label>
 		<InputNumber id="taxperiod1" @bind-Value="MyInput.TaxPeriod"/>
 		<ValidationMessage For="() => MyInput.TaxPeriod"/>
@@ -53,49 +63,61 @@
           Enhance>
 	<DataAnnotationsValidator/>
 	<ValidationSummary class="text-danger" role="alert"/>
+	@* Start with a row, then define the columns. *@
 	<div class="mb-3 row">
+		@* col-* makes the label and div be side-by-side. Otherwise they would stack vertically. *@
+		@* sm-* means it is for the "small" breakpoint size. *@
+		@* 3 means the width is 3/12 of the available space. *@
 		<label class="col-sm-3 col-form-label" for="qualdiv2">Qualified Dividends</label>
-		<div class="col-sm-9">
+		@* 4 means this takes 4/12 of the available space. *@
+		@* If we don't wrap InputXxx in a div, the input control will be a bit wider than it should be. *@
+		<div class="col-sm-4">
 			<InputNumber class="form-control" id="qualdiv2" @bind-Value="MyInput.QualifiedDividends"/>
 		</div>
 		<ValidationMessage For="() => MyInput.QualifiedDividends"/>
 	</div>
 	<div class="mb-3 row">
 		<label class="col-sm-3 col-form-label" for="longgains2">Long Term Capital Gains</label>
-		<div class="col-sm-9">
+		<div class="col-sm-4">
 			<InputNumber class="form-control" id="longgains2" @bind-Value="MyInput.LongTermCaptialGains"/>
 		</div>
 		<ValidationMessage For="() => MyInput.LongTermCaptialGains"/>
 	</div>
 	<div class="mb-3 row">
 		<label class="col-sm-3 col-form-label" for="orddiv2">Ordinary Dividends</label>
-		<div class="col-sm-9">
+		<div class="col-sm-4">
 			<InputNumber class="form-control" id="orddiv2" @bind-Value="MyInput.OrdinaryDividends"/>
 		</div>
 		<ValidationMessage For="() => MyInput.OrdinaryDividends"/>
 	</div>
 	<div class="mb-3 row">
 		<label class="col-sm-3 col-form-label" for="shortgains2">Short Term Capital Gains</label>
-		<div class="col-sm-9">
+		<div class="col-sm-4">
 			<InputNumber class="form-control" id="shortgains2" @bind-Value="MyInput.ShortTermCapitalGains"/>
 		</div>
 		<ValidationMessage For="() => MyInput.ShortTermCapitalGains"/>
 	</div>
 	<div class="mb-3 row">
 		<label class="col-sm-3 col-form-label" for="otherord2">Other Ordinary Income</label>
-		<div class="col-sm-9">
+		<div class="col-sm-4">
 			<InputNumber class="form-control" id="otherord2" @bind-Value="MyInput.OtherOrdinaryIncome"/>
 		</div>
 		<ValidationMessage For="() => MyInput.OtherOrdinaryIncome"/>
 	</div>
 	<div class="mb-3 row">
-		<label class="col-sm-3 col-form-label" for="taxperiod2">Tax Period (1 - 4)</label>
-		<div class="col-sm-9">
-			<InputNumber class="form-control" id="taxperiod2" @bind-Value="MyInput.TaxPeriod"/>
+		<label class="col-sm-3 col-form-label" for="taxperiod2-s">Tax Period</label>
+		<div class="col-sm-4">
+			<InputSelect class="form-select btn btn-outline-secondary" id="taxperiod2-s" @bind-Value="MyInput.TaxPeriod">
+				<option value="1">Period 1 (Jan - Mar)</option>
+				<option value="2">Period 2 (Jan - May)</option>
+				<option value="3">Period 3 (Jan - Aug)</option>
+				<option value="4">Period 4 (Jan - Dec)</option>
+			</InputSelect>
 		</div>
 		<ValidationMessage For="() => MyInput.TaxPeriod"/>
 	</div>
 	<div class="row">
+		@* offset indents it by the number of columns specified. *@
 		<div class="offset-sm-3">
 			@* btn-primary makes it blue and btn gives it rounded corners. *@
 			<button class="btn btn-primary" type="submit">Submit!</button>
@@ -112,6 +134,7 @@
 </QuickGrid>
 
 @code {
+
 	public class FormLine
 	{
 		// NOTE: A line may contain a letter (EX: Line 13b) so this must be a string.
@@ -123,24 +146,20 @@
 
 	public class UserInputs
 	{
-		[Range(0, 999999999)]
-		public decimal QualifiedDividends { get; set; }
+		[Range(0, 999999999)] public decimal QualifiedDividends { get; set; }
 
 		// TODO: Can this be negative? If so, can it be less than -3000?
 		// TODO: Or does the "max" capital loss rule come after net gains has been calculated?
 		public decimal LongTermCaptialGains { get; set; }
 
-		[Range(0, 999999999)]
-		public decimal OrdinaryDividends { get; set; }
+		[Range(0, 999999999)] public decimal OrdinaryDividends { get; set; }
 
 		// TODO: See LTCG for range info.
 		public decimal ShortTermCapitalGains { get; set; }
 
-		[Range(0, 999999999)]
-		public decimal OtherOrdinaryIncome { get; set; }
+		[Range(0, 999999999)] public decimal OtherOrdinaryIncome { get; set; }
 
-		[Range(1, 4)]
-		public int TaxPeriod { get; set; } = 4;
+		[Range(1, 4)] public int TaxPeriod { get; set; } = 4;
 	}
 
 	UserInputs MyInput { get; init; } = new();
@@ -156,7 +175,7 @@
 		})
 		.AsQueryable();
 
-    // Real work likely requires an 'async' method and a 'Task' return type.
+	// Real work likely requires an 'async' method and a 'Task' return type.
 	void GetWorksheet()
 	{
 		// TODO: This code is copied from the console app. Surely there is a better way.
@@ -167,8 +186,8 @@
 		// For Line 1, assume that Lines 33 - 43 are 0 (i.e. no self-employment income).
 		// NOTE: We are rounding before annualizing because we don't put decimal values on a worksheet.
 		int aetwLine1 = TaxCalculations.Round(MyInput.QualifiedDividends
-		                              + MyInput.LongTermCaptialGains + MyInput.OrdinaryDividends
-		                              + MyInput.ShortTermCapitalGains + MyInput.OtherOrdinaryIncome);
+		                                      + MyInput.LongTermCaptialGains + MyInput.OrdinaryDividends
+		                                      + MyInput.ShortTermCapitalGains + MyInput.OtherOrdinaryIncome);
 
 		int aetwLine3 = TaxCalculations.Round(aetwLine1 * annualizationFactor);
 
@@ -184,4 +203,5 @@
 
 		_form1 = TaxForms.EstimatedQualDivCapGainWorksheet(line1, line2, line3);
 	}
+
 }
