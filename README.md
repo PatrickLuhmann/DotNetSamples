@@ -8,3 +8,5 @@ I use this repo for sample code that I have written in order to learn a new feat
 - https://learn.microsoft.com/en-us/ef/core/
 - https://www.entityframeworktutorial.net/efcore/entity-framework-core.aspx
 
+- https://nbarbettini.gitbooks.io/little-asp-net-core-book/content/
+

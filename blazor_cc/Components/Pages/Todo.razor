@@ -3,6 +3,8 @@
 
 @using Microsoft.AspNetCore.Components.QuickGrid
 
+@inject  ITodoItemService MyServiceName
+
 <PageTitle>Todo</PageTitle>
 
 <h1>Todo List Sample</h1>
@@ -48,6 +50,33 @@
 	<PropertyColumn Property="@(t => t)"/>
 </QuickGrid>
 
+<p>This list was populated using my TodoItemService.</p>
+@if (_serviceTodoItems is null)
+{
+	<p>Loading todo items via async service method...</p>
+}
+else
+{
+	<p>These are the not yet completed items.</p>
+	<QuickGrid Items="@QueryServiceTodoItems">
+		<PropertyColumn Property="@(t => t.Title)"/>
+		<PropertyColumn Property="@(t => t.IsDone)"/>
+	</QuickGrid>
+}
+
+@if (_serviceDoneItems is null)
+{
+	<p>Loading done items via async service method...</p>
+}
+else
+{
+	<p>These are the completed items.</p>
+	<QuickGrid Items="@QueryServiceDoneItems">
+		<PropertyColumn Property="@(t => t.Title)"/>
+		<PropertyColumn Property="@(t => t.IsDone)"/>
+	</QuickGrid>
+}
+
 @code {
 
 	// For basic elements, a List is fine.
@@ -68,6 +97,18 @@
 			_todos.Add(new TodoItem { Title = _newTodo });
 			_newTodo = string.Empty;
 		}
+	}
+
+	// My Service Dependency Injection
+	List<TodoItem>? _serviceTodoItems;
+	IQueryable<TodoItem> QueryServiceTodoItems => _serviceTodoItems!.AsQueryable();
+	List<TodoItem>? _serviceDoneItems;
+	IQueryable<TodoItem> QueryServiceDoneItems => _serviceDoneItems!.AsQueryable();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_serviceTodoItems = await MyServiceName.GetIncompleteItemsAsync();
+		_serviceDoneItems = await MyServiceName.GetCompleteItemsAsync();
 	}
 
 }

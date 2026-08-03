@@ -1,3 +1,4 @@
+using blazor_cc;
 using blazor_cc.Components;
 using BlazorWebAppMovies.Data;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Add services to the container.
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
+
+// TODO: Replace this with a "real" service for the published version.
+// TODO: A database service will use AddScoped instead so that a new instance is created for each web request.
+builder.Services.AddSingleton<ITodoItemService, DesignTimeTodoItemService>();
 
 var app = builder.Build();
 
