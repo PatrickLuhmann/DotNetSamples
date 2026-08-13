@@ -4,26 +4,26 @@ namespace BookKlubKorner.Domain;
 
 public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 {
-	private List<Book> _designTimeBooks = [];
+	private readonly List<Book> _designTimeBooks = [];
 	private int _nextId = 1;
-	private int _designDelay = 1;
+	private readonly int _designDelay = 1;
+
+	public DesignTimeBookKlubKornerService()
+	{
+		PopulateBookList();
+	}
 
 	public List<Book> GetAllBooks()
 	{
 		throw new NotImplementedException();
 	}
 
-	public void AddBook(string title, string author, string publisher, int pages, int year)
+	#region IBookKlubKornerService async methods
+
+	public async Task<int> GetCountOfBooksAsync()
 	{
-		_designTimeBooks.Add(new Book()
-		{
-			Id = _nextId++,
-			Title = title,
-			Author = author,
-			Publisher = publisher,
-			NumPages = pages,
-			PublicationYear = year,
-		});
+		await Task.Delay(_designDelay);
+		return _designTimeBooks.Count;
 	}
 
 	public async Task<List<Book>> GetAllBooksAsync()
@@ -55,6 +55,37 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 		await Task.Delay(_designDelay);
 		// TODO: Do we throw an exception if id isn't valid? Or just let the caller figure it out?
 		_designTimeBooks.RemoveAll(b => b.Id == id);
+	}
+
+	public async Task<Book> CreateBookAsync(Book source)
+	{
+		await Task.Delay(_designDelay);
+		Book book = new()
+		{
+			Title = source.Title,
+			Author = source.Author,
+			NumPages = source.NumPages,
+			Publisher = source.Publisher,
+			PublicationYear = source.PublicationYear,
+			Id = _nextId++,
+		};
+		_designTimeBooks.Add(book);
+		return book;
+	}
+
+	#endregion
+
+	private void AddBook(string title, string author, string publisher, int pages, int year)
+	{
+		_designTimeBooks.Add(new Book()
+		{
+			Id = _nextId++,
+			Title = title,
+			Author = author,
+			Publisher = publisher,
+			NumPages = pages,
+			PublicationYear = year,
+		});
 	}
 
 	private void PopulateBookList()

@@ -40,7 +40,7 @@ else
 		<p>Do you want to delete this book?</p>
 		<EditForm method="post" Model="BookToDelete" OnValidSubmit="DeleteBook" FormName="delete" Enhance>
 			<button type="submit" class="btn btn-danger" disabled="@(BookToDelete is null)">Delete</button>
-			<a href="/bookclub" class="btn btn-info">Back To Book List</a>
+			<a href="/bookclub/book-index" class="btn btn-info">Back To Book List</a>
 		</EditForm>
 	</div>
 }

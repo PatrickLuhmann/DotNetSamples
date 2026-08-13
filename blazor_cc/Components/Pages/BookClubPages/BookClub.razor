@@ -2,44 +2,28 @@
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
-@using Microsoft.AspNetCore.Components.QuickGrid
 
 @inject IBookKlubKornerService BookKlubKornerService
 
-<h3>BookKlubKorner</h3>
+<h3>Welcome To The Book Club</h3>
 
-<p>This table uses only HTTP requests from client to server.</p>
-<div>
-	<QuickGrid Class="table" Items="QuickBooks">
-		<PropertyColumn Property="book => book.Title" Sortable="true"/>
-		<PropertyColumn Property="book => book.Author" Sortable="true"/>
-		<PropertyColumn Property="book => book.PublicationYear" Title="Publication Year"/>
-		<PropertyColumn Property="book => book.NumPages" title="Number Of Pages"/>
-		<PropertyColumn Property="book => book.Publisher"/>
+<p>
+	There are @_bookCount books in the library.
+	<a href="/bookclub/book-index">Go to books</a>
+</p>
 
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit?id={book.Id}")">Edit (Static)</a> |
-			<a href="@($"bookclub/book-edit-intsrv?id={book.Id}")">Edit (Int Serv)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit-vm?id={book.Id}")">Edit (VM)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit-vm-wrap?id={book.Id}")">Edit (VM wrap)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-delete?id={book.Id}")">Delete</a>
-		</TemplateColumn>
-	</QuickGrid>
-</div>
+<p>
+	There are no readers in the library.
+	<a href="/bookclub/reader-index">Go to readers</a>
+</p>
 
 @code {
-	List<Book> _books = [];
-	IQueryable<Book> QuickBooks => _books.AsQueryable();
+
+	int _bookCount;
 
 	protected override async Task OnInitializedAsync()
 	{
-		_books = await BookKlubKornerService.GetAllBooksAsync();
+		_bookCount = await BookKlubKornerService.GetCountOfBooksAsync();
 	}
 
 }
