@@ -41,6 +41,7 @@ else
 					<ValidationMessage For="() => BookToEdit.BookEntity.PublicationYear" class="text-danger"/>
 				</div>
 				<button type="submit" class="btn btn-primary">Update</button>
+				<a href="/bookclub" class="btn btn-info">Back To Book List</a>
 			</EditForm>
 		</div>
 	</div>
@@ -78,7 +79,7 @@ else
 	private async Task UpdateBook()
 	{
 		BookToEdit!.BookEntity!.Id = Id; // restore the correct Id
-		await BookKlubKornerService.UpdateBook(BookToEdit.BookEntity);
+		await BookKlubKornerService.UpdateBookAsync(BookToEdit.BookEntity);
 
 		NavigationManager.NavigateTo("/bookclub");
 	}

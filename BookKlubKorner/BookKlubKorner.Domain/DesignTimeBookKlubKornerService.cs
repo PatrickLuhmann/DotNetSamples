@@ -40,7 +40,7 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 		return theBook;
 	}
 
-	public async Task UpdateBook(Book source)
+	public async Task UpdateBookAsync(Book source)
 	{
 		await Task.Delay(_designDelay);
 		Book? targetBook = _designTimeBooks.FirstOrDefault(b => b.Id == source.Id);
@@ -50,6 +50,13 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 		targetBook.Publisher = source.Publisher;
 		targetBook.NumPages = source.NumPages;
 		targetBook.PublicationYear = source.PublicationYear;
+	}
+
+	public async Task DeleteBookAsync(int id)
+	{
+		await Task.Delay(_designDelay);
+		// TODO: Do we throw an exception if id isn't valid? Or just let the caller figure it out?
+		_designTimeBooks.RemoveAll(b => b.Id == id);
 	}
 
 	private void PopulateBookList()

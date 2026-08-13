@@ -11,5 +11,6 @@ public interface IBookKlubKornerService
 	// Async
 	Task<List<Book>> GetAllBooksAsync();
 	Task<Book?> GetBookByIdAsync(int id);
-	Task UpdateBook(Book source);
+	Task UpdateBookAsync(Book source);
+	Task DeleteBookAsync(int id);
 }

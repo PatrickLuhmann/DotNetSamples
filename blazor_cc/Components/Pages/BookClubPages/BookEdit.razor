@@ -65,7 +65,7 @@ else
 
 	private async Task UpdateBook()
 	{
-		await BookKlubKornerService.UpdateBook(BookToEdit!);
+		await BookKlubKornerService.UpdateBookAsync(BookToEdit!);
 		NavigationManager.NavigateTo("/bookclub");
 	}
 

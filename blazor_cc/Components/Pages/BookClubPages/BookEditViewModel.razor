@@ -2,7 +2,6 @@
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
-@using System.ComponentModel.DataAnnotations
 
 @inject IBookKlubKornerService BookKlubKornerService
 @inject NavigationManager NavigationManager
@@ -82,7 +81,7 @@ else
 			Publisher = BookToEdit!.Publisher!,
 			Title = BookToEdit!.Title!,
 		};
-		await BookKlubKornerService.UpdateBook(bookEntity);
+		await BookKlubKornerService.UpdateBookAsync(bookEntity);
 		NavigationManager.NavigateTo("/bookclub");
 	}
 
