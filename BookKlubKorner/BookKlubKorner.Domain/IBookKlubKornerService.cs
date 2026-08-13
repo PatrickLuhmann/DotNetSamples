@@ -6,7 +6,7 @@ public interface IBookKlubKornerService
 {
 	// Sync
 	List<Book> GetAllBooks();
-	void AddBook(string title, string publisher, int pages, int year);
+	void AddBook(string title, string author, string publisher, int pages, int year);
 
 	// Async
 	Task<List<Book>> GetAllBooksAsync();
