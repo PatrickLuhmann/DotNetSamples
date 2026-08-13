@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/BookKlubKorner/">
+    <Project Path="BookKlubKorner/BookKlubKorner.Domain/BookKlubKorner.Domain.csproj" />
+    <Project Path="BookKlubKorner/BookKlubKorner.Domain.Tests/BookKlubKorner.Domain.Tests.csproj" />
+    <Project Path="BookKlubKorner/BookKlubKorner.Model/BookKlubKorner.Model.csproj" />
+  </Folder>
   <Folder Name="/TaxTools/">
     <Project Path="TaxTools/TaxTools.Tests/TaxTools.Tests.csproj" />
     <Project Path="TaxTools/TaxTools/TaxTools.csproj" />

@@ -1,0 +1,72 @@
+@page "/bookclub/book-edit"
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit Book</PageTitle>
+
+<p>RendererInfo.IsInteractive: @RendererInfo.IsInteractive </p>
+
+@if (BookToEdit is null)
+{
+	<p>Searching the vast library for the book you requested...</p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm method="post" Model="BookToEdit" OnValidSubmit="UpdateBook" FormName="editbook" Enhance>
+				<DataAnnotationsValidator/>
+				<ValidationSummary role="alert"/>
+				<div class="mb-3">
+					<label for="title" class="form-label">Title:</label>
+					<InputText id="title" @bind-Value="BookToEdit.Title" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="publisher" class="form-label">Publisher:</label>
+					<InputText id="publisher" @bind-Value="BookToEdit.Publisher" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="pages" class="form-label">Number Of Pages:</label>
+					<InputNumber id="pages" @bind-Value="BookToEdit.NumPages" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="year" class="form-label">Year Published:</label>
+					<InputNumber id="year" @bind-Value="BookToEdit.PublicationYear" class="form-control"/>
+				</div>
+				<button type="submit" class="btn btn-primary">Update</button>
+				<input type="hidden" name="BookToEdit.Id" value="@BookToEdit.Id"/>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private Book? BookToEdit { get; set; }
+
+	@*
+	   This is called once when the component is loaded (there is no pre-render).
+	   This is also called on form submit, before the submit callback. In that case,
+	   we don't want to overwrite BookToEdit, which is why we check for null before
+	   getting a new object.
+	*@
+	protected override async Task OnInitializedAsync()
+	{
+		BookToEdit ??= await BookKlubKornerService.GetBookByIdAsync(Id);
+	}
+
+	private async Task UpdateBook()
+	{
+		await BookKlubKornerService.UpdateBook(BookToEdit!);
+		NavigationManager.NavigateTo("/bookclub");
+	}
+
+}

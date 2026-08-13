@@ -1,0 +1,77 @@
+@page "/bookclub/book-edit-intsrv"
+@rendermode InteractiveServer
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit Book</PageTitle>
+
+@if (BookToEdit is null)
+{
+	<p>Searching the vast library for the book you requested...</p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm method="post" Model="BookToEdit" OnValidSubmit="UpdateBook" FormName="editbook" Enhance>
+				<DataAnnotationsValidator/>
+				<ValidationSummary role="alert"/>
+				<div class="mb-3">
+					<label for="title" class="form-label">Title:</label>
+					<InputText id="title" @bind-Value="BookToEdit.Title" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="publisher" class="form-label">Publisher:</label>
+					<InputText id="publisher" @bind-Value="BookToEdit.Publisher" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="pages" class="form-label">Number Of Pages:</label>
+					<InputNumber id="pages" @bind-Value="BookToEdit.NumPages" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="year" class="form-label">Year Published:</label>
+					<InputNumber id="year" @bind-Value="BookToEdit.PublicationYear" class="form-control"/>
+				</div>
+				<button type="submit" class="btn btn-primary">Update</button>
+				<input type="hidden" name="BookToEdit.Id" value="@BookToEdit.Id"/>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private Book? BookToEdit { get; set; }
+
+	@*
+	   This is called twice when the component is loaded (once for the pre-render phase and
+	   then again for the render phase). Local variables are reset for the second call.
+       This is not called before the submit callback.
+	*@
+	protected override async Task OnInitializedAsync()
+	{
+		// Only fetch the data on the second pass, to avoid fetching twice.
+		// TODO: Is there a better way to do this? Can we count on the service caching the data?
+		if (RendererInfo.IsInteractive)
+		{
+			BookToEdit = await BookKlubKornerService.GetBookByIdAsync(Id);
+			if (BookToEdit is null)
+				NavigationManager.NotFound();
+		}
+	}
+
+	private async Task UpdateBook()
+	{
+		await BookKlubKornerService.UpdateBook(BookToEdit!);
+		NavigationManager.NavigateTo("/bookclub");
+	}
+
+}
