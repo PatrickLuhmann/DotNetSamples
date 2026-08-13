@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Domain\BookKlubKorner.Domain.csproj" />
+    <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Model\BookKlubKorner.Model.csproj" />
     <ProjectReference Include="..\TaxTools\TaxTools\TaxTools.csproj" />
   </ItemGroup>
 
