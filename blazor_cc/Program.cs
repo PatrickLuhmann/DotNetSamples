@@ -20,9 +20,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-// TODO: Replace this with a "real" service for the published version.
 // TODO: A database service will use AddScoped instead so that a new instance is created for each web request.
+builder.Services.AddSingleton<ITodoItemRepository, InMemoryTodoItemRepository>();
+// TODO: Replace this with a "real" service for the published version.
 builder.Services.AddSingleton<ITodoItemService, DesignTimeTodoItemService>();
+
+builder.Services.AddSingleton<IBookKlubKornerService, DesignTimeBookKlubKornerService>();
 
 var app = builder.Build();
 

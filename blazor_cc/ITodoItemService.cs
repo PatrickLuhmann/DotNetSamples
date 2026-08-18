@@ -9,4 +9,7 @@ public interface ITodoItemService
 	// Supposedly real database access will need to use async.
 	Task<List<TodoItem>> GetCompleteItemsAsync();
 	Task<List<TodoItem>> GetIncompleteItemsAsync();
+
+	// test
+	List<TodoItem> GetAllItems();
 }

@@ -77,6 +77,19 @@ else
 	</QuickGrid>
 }
 
+@if (_repoTodoItems is null)
+{
+	<p>Loading repo items via async service method...</p>
+}
+else
+{
+	<p>These are the items stored in the repo.</p>
+	<QuickGrid Items="@QueryRepoItems">
+		<PropertyColumn Property="@(t => t.Title)"/>
+		<PropertyColumn Property="@(t => t.IsDone)"/>
+	</QuickGrid>
+}
+
 @code {
 
 	// For basic elements, a List is fine.
@@ -105,10 +118,15 @@ else
 	List<TodoItem>? _serviceDoneItems;
 	IQueryable<TodoItem> QueryServiceDoneItems => _serviceDoneItems!.AsQueryable();
 
+	List<TodoItem>? _repoTodoItems;
+	IQueryable<TodoItem> QueryRepoItems => _repoTodoItems!.AsQueryable();
+
 	protected override async Task OnInitializedAsync()
 	{
 		_serviceTodoItems = await MyServiceName.GetIncompleteItemsAsync();
 		_serviceDoneItems = await MyServiceName.GetCompleteItemsAsync();
+
+		_repoTodoItems = MyServiceName.GetAllItems();
 	}
 
 }
