@@ -37,6 +37,8 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 			NumPages = 365,
 			PublicationYear = 1970
 		});
+
+		// TODO: Add some Readers.
 	}
 
 	#region IBookKlubKornerService sync methods
@@ -49,6 +51,8 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 	#endregion
 
 	#region IBookKlubKornerService async methods
+
+	// BOOKS
 
 	public async Task<int> GetCountOfBooksAsync()
 	{
@@ -79,6 +83,33 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 	{
 		await _repository.AddBookAsync(source);
 		return source;
+	}
+
+	// READERS
+
+	public async Task<int> GetCountOfReadersAsync()
+	{
+		return await _repository.GetCountOfReadersAsync();
+	}
+
+	public async Task<List<Reader>> GetAllReadersAsync()
+	{
+		return [.. await _repository.GetAllReadersAsync()];
+	}
+
+	public async Task CreateReaderAsync(Reader reader)
+	{
+		await _repository.AddReaderAsync(reader);
+	}
+
+	public async Task<Reader?> GetReaderByIdAsync(int id)
+	{
+		return await _repository.GetReaderAsync(id);
+	}
+
+	public async Task UpdateReaderAsync(Reader reader)
+	{
+		await _repository.UpdateReaderAsync(reader);
 	}
 
 	#endregion

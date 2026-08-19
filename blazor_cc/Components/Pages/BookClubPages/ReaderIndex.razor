@@ -1,7 +1,37 @@
 @page "/bookclub/reader-index"
 
-<h3>ReaderIndex</h3>
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+@inject IBookKlubKornerService BookKlubKornerService
+
+<h1>Readers In The Book Club</h1>
+
+<a href="/bookclub/reader-create">Create New Reader</a>
+<a href="/bookclub">Back To Book Club Home</a>
+
+<div>
+	<QuickGrid Class="table" Items="QuickReaders">
+		<PropertyColumn Property="reader => reader.Nickname" Sortable="true"/>
+		<PropertyColumn Property="reader => reader.Biography"/>
+
+		<TemplateColumn Context="reader">
+			<a href="@($"bookclub/reader-edit-vm-wrap?id={reader.Id}")">Edit (VM wrap)</a>
+		</TemplateColumn>
+		<TemplateColumn Context="reader">
+			<a href="@($"bookclub/reader-delete?id={reader.Id}")">Delete</a>
+		</TemplateColumn>
+	</QuickGrid>
+</div>
 
 @code {
+	List<Reader> _readers = [];
+	IQueryable<Reader> QuickReaders => _readers.AsQueryable();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_readers = await BookKlubKornerService.GetAllReadersAsync();
+	}
 
 }

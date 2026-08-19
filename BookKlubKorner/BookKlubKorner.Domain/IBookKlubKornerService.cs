@@ -4,6 +4,10 @@ namespace BookKlubKorner.Domain;
 
 public interface IBookKlubKornerService
 {
+	//
+	// BOOKS
+	//
+
 	// Sync
 	List<Book> GetAllBooks();
 
@@ -14,4 +18,14 @@ public interface IBookKlubKornerService
 	Task UpdateBookAsync(Book source);
 	Task DeleteBookAsync(int id);
 	Task<Book> CreateBookAsync(Book source);
+
+	//
+	// READERS
+	//
+
+	Task<int> GetCountOfReadersAsync();
+	Task<List<Reader>> GetAllReadersAsync();
+	Task CreateReaderAsync(Reader reader);
+	Task<Reader?> GetReaderByIdAsync(int id);
+	Task UpdateReaderAsync(Reader reader);
 }
