@@ -1,7 +1,6 @@
 @page "/bookclub"
 
 @using BookKlubKorner.Domain
-@using BookKlubKorner.Model
 
 @inject IBookKlubKornerService BookKlubKornerService
 
@@ -13,17 +12,19 @@
 </p>
 
 <p>
-	There are no readers in the library.
+	There are @_readerCount readers in the library.
 	<a href="/bookclub/reader-index">Go to readers</a>
 </p>
 
 @code {
 
 	int _bookCount;
+	int _readerCount;
 
 	protected override async Task OnInitializedAsync()
 	{
 		_bookCount = await BookKlubKornerService.GetCountOfBooksAsync();
+		_readerCount = await BookKlubKornerService.GetCountOfReadersAsync();
 	}
 
 }

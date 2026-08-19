@@ -4,6 +4,10 @@ namespace BookKlubKorner.Repository;
 
 public interface IBookKlubKornerRepository
 {
+	//
+	// BOOKS
+	//
+
 	int GetCountOfBooks();
 	IEnumerable<Book> GetAllBooks();
 	void AddBook(Book book);
@@ -17,4 +21,23 @@ public interface IBookKlubKornerRepository
 	Task<Book?> GetBookAsync(int id);
 	Task UpdateBookAsync(Book book);
 	Task DeleteBookAsync(int id);
+
+	//
+	// READERS
+	//
+
+	int GetCountOfReaders();
+	Task<int> GetCountOfReadersAsync();
+
+	IEnumerable<Reader> GetAllReaders();
+	Task<IEnumerable<Reader>> GetAllReadersAsync();
+
+	void AddReader(Reader reader);
+	Task AddReaderAsync(Reader reader);
+
+	Reader? GetReader(int id);
+	Task<Reader?> GetReaderAsync(int id);
+
+	void UpdateReader(Reader reader);
+	Task UpdateReaderAsync(Reader reader);
 }

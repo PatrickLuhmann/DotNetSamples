@@ -6,6 +6,10 @@ public class InMemoryBookKlubKornerRepo : IBookKlubKornerRepository
 {
 	#region IBookKlubKornerRepository
 
+	//
+	// BOOKS
+	//
+
 	// Sync
 
 	public int GetCountOfBooks()
@@ -112,6 +116,89 @@ public class InMemoryBookKlubKornerRepo : IBookKlubKornerRepository
 		DeleteBook(id);
 	}
 
+	//
+	// READERS
+	//
+
+	public int GetCountOfReaders()
+	{
+		return _readerRepo.Count;
+	}
+
+	public async Task<int> GetCountOfReadersAsync()
+	{
+		await Task.Delay(_delay);
+		return GetCountOfReaders();
+	}
+
+	public IEnumerable<Reader> GetAllReaders()
+	{
+		return _readerRepo.Select(r => new Reader()
+		{
+			Id = r.Id,
+			Nickname = r.Nickname,
+			Biography = r.Biography,
+		});
+	}
+
+	public async Task<IEnumerable<Reader>> GetAllReadersAsync()
+	{
+		await Task.Delay(_delay);
+		return GetAllReaders();
+	}
+
+	public void AddReader(Reader reader)
+	{
+		ReaderEntity entity = new()
+		{
+			Id = NextId,
+			Nickname = reader.Nickname,
+			Biography = reader.Biography,
+		};
+		_readerRepo.Add(entity);
+	}
+
+	public async Task AddReaderAsync(Reader reader)
+	{
+		await Task.Delay(_delay);
+		AddReader(reader);
+	}
+
+	public Reader? GetReader(int id)
+	{
+		var entity = _readerRepo.FirstOrDefault(r => r.Id == id);
+		if (entity is null)
+			return null;
+		Reader reader = new()
+		{
+			Id = entity.Id,
+			Nickname = entity.Nickname,
+			Biography = entity.Biography,
+		};
+		return reader;
+	}
+
+	public async Task<Reader?> GetReaderAsync(int id)
+	{
+		await Task.Delay(_delay);
+		return GetReader(id);
+	}
+
+	public void UpdateReader(Reader reader)
+	{
+		var entity = _readerRepo.FirstOrDefault(r => r.Id == reader.Id);
+		if (entity is null)
+			return;
+		entity.Nickname = reader.Nickname;
+		entity.Biography = reader.Biography;
+	}
+
+	public async Task UpdateReaderAsync(Reader reader)
+	{
+		await Task.Delay(_delay);
+		UpdateReader(reader);
+	}
+
 	#endregion
 
 	public InMemoryBookKlubKornerRepo()
@@ -122,16 +209,23 @@ public class InMemoryBookKlubKornerRepo : IBookKlubKornerRepository
 			Id = NextId, Title = "The Epic Of Gilgamesh", Author = "Unknown Sumerian",
 			Publisher = "Old Babylon Press", NumPages = 5, PublicationYear = -1800,
 		});
+
+		_readerRepo.Add(new ReaderEntity()
+		{
+			Id = NextId, Nickname = "BowlingBada$$", Biography = "I'm an air-conditioned gypsy.",
+		});
 	}
 
 	private readonly int _delay = 1; // in milliseconds
 
+	// We'e using a global ID pool for all entities.
 	private int NextId
 	{
 		get => field++;
 	} = 1;
 
 	private readonly List<BookEntity> _bookRepo = [];
+	private readonly List<ReaderEntity> _readerRepo = [];
 
 	private class BookEntity
 	{
@@ -141,5 +235,12 @@ public class InMemoryBookKlubKornerRepo : IBookKlubKornerRepository
 		public string Publisher { get; set; } = string.Empty;
 		public int NumPages { get; set; }
 		public int PublicationYear { get; set; }
+	}
+
+	private class ReaderEntity
+	{
+		public int Id { get; set; }
+		public string Nickname { get; set; } = string.Empty;
+		public string Biography { get; set; } = string.Empty;
 	}
 }

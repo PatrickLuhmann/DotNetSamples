@@ -28,15 +28,4 @@ public class Book
 	[Required]
 	[Range(-4000, 3000)]
 	public int PublicationYear { get; set; }
-
-	// TODO: Is this a good way to do this? I don't want to duplicate this code
-	// throughout the other layers.
-	public void UpdateProperties(Book source)
-	{
-		Title = source.Title;
-		Author = source.Author;
-		Publisher = source.Publisher;
-		NumPages = source.NumPages;
-		PublicationYear = source.PublicationYear;
-	}
 }

@@ -1,0 +1,82 @@
+@page "/bookclub/reader-edit-vm-wrap"
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit Reader (VM Wrap)</PageTitle>
+
+@if (ReaderToEdit is null)
+{
+	<p>Searching personnel records for the reader you requested...</p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			@* In order to "see" the data annotations, we must explicitly reference ReaderEntity in Model property. *@
+			<EditForm method="post" Model="ReaderToEdit.ReaderEntity" OnValidSubmit="UpdateReader" FormName="editreader" Enhance>
+				<DataAnnotationsValidator/>
+				<ValidationSummary role="alert"/>
+				<div class="mb-3">
+					<label for="nickname" class="form-label">Nickname:</label>
+					<InputText id="nickname" @bind-Value="ReaderToEdit.ReaderEntity!.Nickname" class="form-control"/>
+					<ValidationMessage For="() => ReaderToEdit.ReaderEntity.Nickname" class="text-danger"/>
+				</div>
+				<div class="mb-3">
+					<label for="biography" class="form-label">Biography:</label>
+					<InputText id="biography" @bind-Value="ReaderToEdit.ReaderEntity!.Biography" class="form-control"/>
+					<ValidationMessage For="() => ReaderToEdit.ReaderEntity.Biography" class="text-danger"/>
+				</div>
+				<button type="submit" class="btn btn-primary">Update</button>
+				<a href="/bookclub/reader-index" class="btn btn-info">Back To Reader List</a>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private EditReaderViewModel? ReaderToEdit { get; set; }
+
+	@*
+	   This is called once when the component is loaded (there is no pre-render).
+	   This is also called on form submit, before the submit callback. In that case,
+	   we don't want to overwrite ReaderToEdit, which is why we check for null before
+	   getting a new object.
+	*@
+	protected override async Task OnInitializedAsync()
+	{
+		if (ReaderToEdit is null)
+		{
+			var readerEntity = await BookKlubKornerService.GetReaderByIdAsync(Id);
+			if (readerEntity is null)
+				NavigationManager.NotFound();
+			else
+				ReaderToEdit = new()
+				{
+					ReaderEntity = readerEntity
+				};
+		}
+	}
+
+	private async Task UpdateReader()
+	{
+		ReaderToEdit!.ReaderEntity!.Id = Id; // restore the correct Id
+		await BookKlubKornerService.UpdateReaderAsync(ReaderToEdit.ReaderEntity);
+
+		NavigationManager.NavigateTo("/bookclub/reader-index");
+	}
+
+	class EditReaderViewModel
+	{
+		public Reader? ReaderEntity { get; init; }
+	}
+
+}
