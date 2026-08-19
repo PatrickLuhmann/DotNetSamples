@@ -1,99 +1,85 @@
 using BookKlubKorner.Model;
+using BookKlubKorner.Repository;
 
 namespace BookKlubKorner.Domain;
 
 public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 {
-	private readonly List<Book> _designTimeBooks = [];
-	private int _nextId = 1;
-	private readonly int _designDelay = 1;
+	private readonly IBookKlubKornerRepository _repository;
 
-	public DesignTimeBookKlubKornerService()
+	public DesignTimeBookKlubKornerService(IBookKlubKornerRepository repo)
 	{
-		PopulateBookList();
+		_repository = repo;
+
+		// For design purposes, we want several items already in the list.
+		_repository.AddBook(new Book()
+		{
+			Title = "Book Title 1",
+			Author = "John Doe",
+			Publisher = "Seagull Home",
+			NumPages = 357,
+			PublicationYear = 1981,
+		});
+
+		_repository.AddBook(new Book()
+		{
+			Title = "Diamonds Shine Like Swine",
+			Author = "Jane Doh",
+			Publisher = "Seagull Home",
+			NumPages = 1332,
+			PublicationYear = 1975
+		});
+		_repository.AddBook(new Book()
+		{
+			Title = "An Annoyance Of Patricks",
+			Author = "John Doe",
+			Publisher = "Seagull Home",
+			NumPages = 365,
+			PublicationYear = 1970
+		});
 	}
+
+	#region IBookKlubKornerService sync methods
 
 	public List<Book> GetAllBooks()
 	{
-		throw new NotImplementedException();
+		return [.. _repository.GetAllBooks()];
 	}
+
+	#endregion
 
 	#region IBookKlubKornerService async methods
 
 	public async Task<int> GetCountOfBooksAsync()
 	{
-		await Task.Delay(_designDelay);
-		return _designTimeBooks.Count;
+		return await _repository.GetCountOfBooksAsync();
 	}
 
 	public async Task<List<Book>> GetAllBooksAsync()
 	{
-		await Task.Delay(_designDelay);
-		if (_designTimeBooks.Count == 0)
-			PopulateBookList();
-		return _designTimeBooks;
+		return [.. await _repository.GetAllBooksAsync()];
 	}
 
 	public async Task<Book?> GetBookByIdAsync(int id)
 	{
-		await Task.Delay(_designDelay);
-		Book? theBook = _designTimeBooks.FirstOrDefault(b => b.Id == id);
-		return theBook;
+		return await _repository.GetBookAsync(id);
 	}
 
 	public async Task UpdateBookAsync(Book source)
 	{
-		await Task.Delay(_designDelay);
-		Book? targetBook = _designTimeBooks.FirstOrDefault(b => b.Id == source.Id);
-		if (targetBook is null)
-			return; // TODO: Throw an exception instead?
-		targetBook.UpdateProperties(source);
+		await _repository.UpdateBookAsync(source);
 	}
 
 	public async Task DeleteBookAsync(int id)
 	{
-		await Task.Delay(_designDelay);
-		// TODO: Do we throw an exception if id isn't valid? Or just let the caller figure it out?
-		_designTimeBooks.RemoveAll(b => b.Id == id);
+		await _repository.DeleteBookAsync(id);
 	}
 
 	public async Task<Book> CreateBookAsync(Book source)
 	{
-		await Task.Delay(_designDelay);
-		Book book = new()
-		{
-			Title = source.Title,
-			Author = source.Author,
-			NumPages = source.NumPages,
-			Publisher = source.Publisher,
-			PublicationYear = source.PublicationYear,
-			Id = _nextId++,
-		};
-		_designTimeBooks.Add(book);
-		return book;
+		await _repository.AddBookAsync(source);
+		return source;
 	}
 
 	#endregion
-
-	private void AddBook(string title, string author, string publisher, int pages, int year)
-	{
-		_designTimeBooks.Add(new Book()
-		{
-			Id = _nextId++,
-			Title = title,
-			Author = author,
-			Publisher = publisher,
-			NumPages = pages,
-			PublicationYear = year,
-		});
-	}
-
-	private void PopulateBookList()
-	{
-		AddBook(title: "Book Title 1", author: "John Doe", publisher: "Seagull Home", pages: 357, year: 1981);
-		AddBook(title: "Diamonds Shine Like Swine", author: "Jane Doh", publisher: "Seagull Home", pages: 1332,
-			year: 1975);
-		AddBook(title: "An Annoyance Of Patricks", author: "John Doe", publisher: "Seagull Home", pages: 365,
-			year: 1970);
-	}
 }

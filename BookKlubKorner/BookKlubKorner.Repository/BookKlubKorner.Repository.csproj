@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookKlubKorner.Model\BookKlubKorner.Model.csproj" />
-    <ProjectReference Include="..\BookKlubKorner.Repository\BookKlubKorner.Repository.csproj" />
   </ItemGroup>
 
 </Project>

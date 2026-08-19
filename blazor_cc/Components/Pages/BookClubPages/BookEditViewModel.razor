@@ -24,6 +24,10 @@ else
 					<InputText id="title" @bind-Value="BookToEdit.Title" class="form-control"/>
 				</div>
 				<div class="mb-3">
+					<label for="author" class="form-label">Author:</label>
+					<InputText id="author" @bind-Value="BookToEdit.Author" class="form-control"/>
+				</div>
+				<div class="mb-3">
 					<label for="publisher" class="form-label">Publisher:</label>
 					<InputText id="publisher" @bind-Value="BookToEdit.Publisher" class="form-control"/>
 				</div>
@@ -36,6 +40,7 @@ else
 					<InputNumber id="year" @bind-Value="BookToEdit.PublicationYear" class="form-control"/>
 				</div>
 				<button type="submit" class="btn btn-primary">Update</button>
+				<a href="/bookclub/book-index" class="btn btn-info">Back To Book List</a>
 			</EditForm>
 		</div>
 	</div>
@@ -64,6 +69,7 @@ else
 			BookToEdit ??= new()
 			{
 				Title = bookEntity.Title,
+				Author = bookEntity.Author,
 				Publisher = bookEntity.Publisher,
 				NumPages = bookEntity.NumPages,
 				PublicationYear = bookEntity.PublicationYear,
@@ -79,16 +85,18 @@ else
 			NumPages = BookToEdit!.NumPages,
 			PublicationYear = BookToEdit!.PublicationYear,
 			Publisher = BookToEdit!.Publisher!,
+			Author = BookToEdit!.Author!,
 			Title = BookToEdit!.Title!,
 		};
 		await BookKlubKornerService.UpdateBookAsync(bookEntity);
-		NavigationManager.NavigateTo("/bookclub");
+		NavigationManager.NavigateTo("/bookclub/book-index");
 	}
 
 	// Data validation goes here if not in the submit callback.
 	class EditBookViewModel
 	{
 		public string? Title { get; set; }
+		public string? Author { get; set; }
 		public string? Publisher { get; set; }
 		public int NumPages { get; set; }
 		public int PublicationYear { get; set; }

@@ -2,6 +2,8 @@ using blazor_cc;
 using blazor_cc.Components;
 using BlazorWebAppMovies.Data;
 using BookKlubKorner.Domain;
+using BookKlubKorner.Repository;
+using BookKlubKorner.Repository.InMemory;
 using Microsoft.EntityFrameworkCore;
 
 // Create the app with preconfigured defaults.
@@ -25,6 +27,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<ITodoItemRepository, InMemoryTodoItemRepository>();
 // TODO: Replace this with a "real" service for the published version.
 builder.Services.AddSingleton<ITodoItemService, DesignTimeTodoItemService>();
+
+builder.Services.AddSingleton<IBookKlubKornerRepository, InMemoryBookKlubKornerRepo>();
 builder.Services.AddSingleton<IBookKlubKornerService, DesignTimeBookKlubKornerService>();
 
 var app = builder.Build();
