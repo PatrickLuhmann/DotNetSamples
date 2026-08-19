@@ -75,7 +75,7 @@ else
 	{
 		await BookKlubKornerService.CreateBookAsync(BookToCreate!.BookEntity!);
 
-		NavigationManager.NavigateTo("/bookclub");
+		NavigationManager.NavigateTo("/bookclub/book-index");
 	}
 
 	class CreateBookViewModel

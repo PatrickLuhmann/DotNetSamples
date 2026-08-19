@@ -86,7 +86,7 @@ else
 		BookToEdit!.BookEntity!.Id = Id; // restore the correct Id
 		await BookKlubKornerService.UpdateBookAsync(BookToEdit.BookEntity);
 
-		NavigationManager.NavigateTo("/bookclub");
+		NavigationManager.NavigateTo("/bookclub/book-index");
 	}
 
 	class EditBookViewModel
