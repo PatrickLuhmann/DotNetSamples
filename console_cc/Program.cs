@@ -11,6 +11,8 @@ while (!quit)
 
 	Console.WriteLine("2. Tax Helper app");
 
+	Console.WriteLine("O. Other information");
+
 	Console.WriteLine("Q. Quit");
 
 	string? input = Console.ReadLine();
@@ -22,6 +24,9 @@ while (!quit)
 			break;
 		case "2":
 			sample = new TaxHelperSample();
+			break;
+		case "o":
+			OtherInformation();
 			break;
 		case "q":
 			quit = true;
@@ -35,3 +40,22 @@ while (!quit)
 }
 
 Console.WriteLine("Thank you for trying .NET Samples!");
+return;
+
+void OtherInformation()
+{
+	Console.WriteLine("Here are some SpecialFolder locations");
+	Console.WriteLine("=====================================");
+	List<Environment.SpecialFolder> folderList =
+	[
+		Environment.SpecialFolder.LocalApplicationData,
+		Environment.SpecialFolder.CommonApplicationData,
+		Environment.SpecialFolder.CommonDesktopDirectory,
+		Environment.SpecialFolder.ApplicationData,
+		Environment.SpecialFolder.MyDocuments,
+		Environment.SpecialFolder.UserProfile
+	];
+	foreach (var folder in folderList)
+		Console.WriteLine($"{folder}: {Environment.GetFolderPath(folder)}");
+	Console.WriteLine();
+}
