@@ -1,0 +1,26 @@
+@page "/bookclub/readers-books"
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Reader's Books</PageTitle>
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	List<ReadersBooksViewModel> _booksWithRating;
+	IQueryable<ReadersBooksViewModel> BooksWithRating => _booksWithRating.AsQueryable();
+
+	class ReadersBooksViewModel
+	{
+		public string Title { get; set; }
+		public string Author { get; set; }
+		public int Rating { get; set; }
+	}
+
+}
