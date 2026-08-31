@@ -25,8 +25,6 @@ builder.Services.AddSingleton<ITodoItemRepository, InMemoryTodoItemRepository>()
 // TODO: Replace this with a "real" service for the published version.
 builder.Services.AddSingleton<ITodoItemService, DesignTimeTodoItemService>();
 
-builder.Services.AddSingleton<IBookKlubKornerService, DesignTimeBookKlubKornerService>();
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
