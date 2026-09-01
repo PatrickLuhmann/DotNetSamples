@@ -4,3 +4,5 @@ root = true
 indent_size = 4
 indent_style = tab
 resharper_check_namespace_highlighting=none
+
+place_attribute_on_same_line = never

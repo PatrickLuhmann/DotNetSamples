@@ -1,0 +1,117 @@
+@page "/editformwithlist"
+@using blazor_cc.Components.Pages.MoviePages
+@using Microsoft.AspNetCore.Components.QuickGrid
+@rendermode InteractiveServer
+
+<PageTitle>Edit Form With List</PageTitle>
+
+<h3>EditFormWithList</h3>
+
+@if (@ViewModelOne is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm Model="ViewModelOne" OnSubmit="SubmitWithListOne" FormName="WithListOne">
+				<div class="mb-3">
+					<label for="myid" class="form-label">ID: </label>
+					<InputNumber id="myid" @bind-Value="ViewModelOne.MyId" class="form-control"/>
+				</div>
+				<div class="mb-3">
+					<label for="mytext" class="form-label">Text: </label>
+					<InputText id="mytext" @bind-Value="ViewModelOne.MyText" class="form-control"/>
+				</div>
+				@foreach (var change in ViewModelOne.MyChanges)
+				{
+					<div class="mb-3">
+						<label class="form-label">Change @change.Guid </label>
+						<InputText @bind-Value="@change.Message" class="form-control"/>
+						<button type="button" @onclick="@(() => DeleteChange(change.Guid))">Delete</button>
+					</div>
+				}
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" @onclick="AddChange" class="btn btn-info">Add Change</button>
+			</EditForm>
+		</div>
+	</div>
+}
+
+<p>ID: @_theId</p>
+<p>Text: @_theText</p>
+<div>
+	<QuickGrid Items="@JustChanges">
+		<PropertyColumn Property="@(c => c.Guid)"></PropertyColumn>
+		<PropertyColumn Property="@(c => c.Message)"></PropertyColumn>
+	</QuickGrid>
+</div>
+
+@code {
+
+	[SupplyParameterFromForm]
+	MyViewModel? ViewModelOne { get; set; }
+
+	int _theId = -1;
+	string _theText = "Nothing yet";
+	IQueryable<MyChangesViewModel> JustChanges => ViewModelOne?.MyChanges.AsQueryable();
+
+	protected override void OnInitialized()
+	{
+		// VMO will be null the first time, then non-null when Submit is clicked.
+		ViewModelOne ??= new MyViewModel
+		{
+			MyId = 123,
+			MyText = "Default text",
+			MyChanges =
+			[
+				new MyChangesViewModel()
+				{
+					Guid = Guid.NewGuid().ToString(),
+					Message = "Initial creation",
+				},
+				new MyChangesViewModel()
+				{
+					Guid = Guid.NewGuid().ToString(),
+					Message = "First change",
+				},
+			],
+		};
+	}
+
+	void AddChange()
+	{
+		ViewModelOne?.MyChanges.Add(new MyChangesViewModel()
+		{
+			Guid = Guid.NewGuid().ToString(),
+			Message = "Default message"
+		});
+	}
+
+	void DeleteChange(string guid)
+	{
+		Console.WriteLine($"DeleteChange: {guid}");
+		ViewModelOne!.MyChanges.RemoveAll(c => c.Guid == guid);
+	}
+
+	void SubmitWithListOne()
+	{
+		_theId = ViewModelOne!.MyId;
+		_theText = ViewModelOne!.MyText;
+	}
+
+	class MyViewModel
+	{
+		public required int MyId { get; set; }
+		public required string MyText { get; set; }
+		public List<MyChangesViewModel> MyChanges { get; set; }
+	}
+
+	class MyChangesViewModel
+	{
+		public string Guid { get; set; }
+		public string Message { get; set; }
+	}
+
+}
