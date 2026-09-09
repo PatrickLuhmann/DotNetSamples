@@ -12,31 +12,33 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 		_repository = repo;
 
 		// For design purposes, we want several items already in the list.
-		_repository.AddBook(new Book()
+		if (_repository.GetCountOfBooks() == 0)
 		{
-			Title = "Book Title 1",
-			Author = "John Doe",
-			Publisher = "Seagull Home",
-			NumPages = 357,
-			PublicationYear = 1981,
-		});
-
-		_repository.AddBook(new Book()
-		{
-			Title = "Diamonds Shine Like Swine",
-			Author = "Jane Doh",
-			Publisher = "Seagull Home",
-			NumPages = 1332,
-			PublicationYear = 1975
-		});
-		_repository.AddBook(new Book()
-		{
-			Title = "An Annoyance Of Patricks",
-			Author = "John Doe",
-			Publisher = "Seagull Home",
-			NumPages = 365,
-			PublicationYear = 1970
-		});
+			_repository.AddBook(new Book()
+			{
+				Title = "Book Title 1",
+				Author = "John Doe",
+				Publisher = "Seagull Home",
+				NumPages = 357,
+				PublicationYear = 1981,
+			});
+			_repository.AddBook(new Book()
+			{
+				Title = "Diamonds Shine Like Swine",
+				Author = "Jane Doh",
+				Publisher = "Seagull Home",
+				NumPages = 1332,
+				PublicationYear = 1975
+			});
+			_repository.AddBook(new Book()
+			{
+				Title = "An Annoyance Of Patricks",
+				Author = "John Doe",
+				Publisher = "Seagull Home",
+				NumPages = 365,
+				PublicationYear = 1970
+			});
+		}
 
 		// TODO: Add some Readers.
 	}
