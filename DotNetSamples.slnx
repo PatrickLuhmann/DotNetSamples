@@ -3,6 +3,7 @@
     <Project Path="BookKlubKorner/BookKlubKorner.Domain/BookKlubKorner.Domain.csproj" />
     <Project Path="BookKlubKorner/BookKlubKorner.Domain.Tests/BookKlubKorner.Domain.Tests.csproj" />
     <Project Path="BookKlubKorner/BookKlubKorner.Model/BookKlubKorner.Model.csproj" />
+    <Project Path="BookKlubKorner/BookKlubKorner.Repository.EntityFrameworkCore/BookKlubKorner.Repository.EntityFrameworkCore.csproj" />
     <Project Path="BookKlubKorner/BookKlubKorner.Repository.InMemory/BookKlubKorner.Repository.InMemory.csproj" />
     <Project Path="BookKlubKorner/BookKlubKorner.Repository/BookKlubKorner.Repository.csproj" />
   </Folder>
