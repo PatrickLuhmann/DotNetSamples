@@ -28,4 +28,11 @@ public interface IBookKlubKornerService
 	Task CreateReaderAsync(Reader reader);
 	Task<Reader?> GetReaderByIdAsync(int id);
 	Task UpdateReaderAsync(Reader reader);
+
+	//
+	// BOOK STATUSES
+	//
+
+	//void CreateBookStatus(int readerId, int bookId);
+	Task CreateBookStatusAsync(int readerId, int bookId);
 }

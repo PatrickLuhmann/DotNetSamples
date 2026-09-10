@@ -114,5 +114,11 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 		await _repository.UpdateReaderAsync(reader);
 	}
 
-	#endregion
+    // BOOK STATUSES
+    public async Task CreateBookStatusAsync(int readerId, int bookId)
+    {
+	    await _repository.CreateBookStatusAsync(readerId, bookId);
+    }
+
+    #endregion
 }
