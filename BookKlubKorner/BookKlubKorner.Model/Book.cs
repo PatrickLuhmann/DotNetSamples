@@ -28,4 +28,8 @@ public class Book
 	[Required]
 	[Range(-4000, 3000)]
 	public int PublicationYear { get; set; }
+
+	// Collection navigation
+	// NOTE: No collection of Readers means this shouldn't be treated as a many-to-many relationship.
+	public ICollection<BookStatus> BookStatuses { get; set; } = new List<BookStatus>();
 }

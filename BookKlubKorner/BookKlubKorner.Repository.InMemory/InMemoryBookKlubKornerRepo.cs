@@ -199,6 +199,16 @@ public class InMemoryBookKlubKornerRepo : IBookKlubKornerRepository
 		UpdateReader(reader);
 	}
 
+	public void CreateBookStatus(int readerId, int bookId)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task CreateBookStatusAsync(int readerId, int bookId)
+	{
+		throw new NotImplementedException();
+	}
+
 	#endregion
 
 	public InMemoryBookKlubKornerRepo()

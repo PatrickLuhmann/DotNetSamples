@@ -40,4 +40,11 @@ public interface IBookKlubKornerRepository
 
 	void UpdateReader(Reader reader);
 	Task UpdateReaderAsync(Reader reader);
+
+	//
+	// BOOK STATUSES
+	//
+
+	void CreateBookStatus(int readerId, int bookId);
+	Task CreateBookStatusAsync(int readerId, int bookId);
 }

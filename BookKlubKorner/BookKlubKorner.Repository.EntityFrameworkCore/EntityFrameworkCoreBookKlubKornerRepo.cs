@@ -175,6 +175,35 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
+	public void CreateBookStatus(int readerId, int bookId)
+	{
+		using var context = _contextFactory.CreateDbContext();
+		var reader = context.Readers.Find(readerId);
+		if (reader is null)
+			throw new Exception($"Reader with id={readerId} not found in database.");
+		var book = context.Books.Find(bookId);
+		if (book is null)
+			throw new Exception($"Book with id={bookId} not found in database.");
+		reader.BookStatuses.Add(new BookStatus());
+		context.SaveChanges();
+	}
+
+	public async Task CreateBookStatusAsync(int readerId, int bookId)
+	{
+		await using var context = await _contextFactory.CreateDbContextAsync();
+		var reader = await context.Readers.FindAsync(readerId);
+		if (reader is null)
+			throw new Exception($"Reader with id={readerId} not found in database.");
+		var book = await context.Books.FindAsync(bookId);
+		if (book is null)
+			throw new Exception($"Book with id={bookId} not found in database.");
+		var bStatus = new BookStatus();
+		reader.BookStatuses.Add(bStatus);
+		book.BookStatuses.Add(bStatus);
+		await context.SaveChangesAsync();
+	}
+
+
 	private readonly IDbContextFactory<BookKlubKornerContext> _contextFactory;
 
 	public EntityFrameworkCoreBookKlubKornerRepo(IDbContextFactory<BookKlubKornerContext> dbFactory)

@@ -20,6 +20,9 @@
 			<a href="@($"bookclub/reader-edit-vm-wrap?id={reader.Id}")">Edit (VM wrap)</a>
 		</TemplateColumn>
 		<TemplateColumn Context="reader">
+			<a href="@($"bookclub/reader-manage?id={reader.Id}")">Manage</a>
+		</TemplateColumn>
+		<TemplateColumn Context="reader">
 			<a href="@($"bookclub/reader-delete?id={reader.Id}")">Delete</a>
 		</TemplateColumn>
 	</QuickGrid>

@@ -1,0 +1,102 @@
+@page "/bookclub/reader-manage"
+@rendermode InteractiveServer
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Manage Reader</PageTitle>
+
+@if (ReaderToManage is null)
+{
+	<p>Searching personnel records for the reader you requested...</p>
+}
+else
+{
+	<p>Reader: @ReaderToManage.ReaderEntity.Nickname</p>
+	<p>They have @ReaderToManage.ReaderEntity.BookStatuses.Count books in their collection.</p>
+	<ul>
+		@foreach (var status in ReaderToManage.ReaderEntity.BookStatuses)
+		{
+			<li>
+				ID: @status.Id
+				Title: @status.Book.Title
+			</li>
+		}
+	</ul>
+
+	<h2>Available Books</h2>
+	<ul>
+		@foreach (var book in _availableBooks)
+		{
+			<li>
+				<input type="checkbox" @bind="book.IsSelected"/>
+				@book.BookEntity.Title
+			</li>
+		}
+	</ul>
+	<button @onclick="UpdateBooksInCollection">Update</button>
+}
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	ReaderViewModel? ReaderToManage { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (ReaderToManage is null)
+		{
+			var readerEntity = await BookKlubKornerService.GetReaderByIdAsync(Id);
+			if (readerEntity is null)
+				NavigationManager.NotFound();
+			else
+				ReaderToManage = new()
+				{
+					ReaderEntity = readerEntity
+				};
+
+			// WIP i think we only want to do this once as well
+			var books = await BookKlubKornerService.GetAllBooksAsync();
+			_availableBooks =
+			[
+				.. books.Select(b => new BookViewModel()
+				{
+					BookEntity = b,
+					IsSelected = false,
+				})
+			];
+		}
+	}
+
+	async void UpdateBooksInCollection()
+	{
+		// TODO: I can't modify the collection inside the foreach, right? So remove them in a separate step.
+		foreach (var outBook in _availableBooks)
+		{
+			if (outBook.IsSelected)
+			{
+				await BookKlubKornerService.CreateBookStatusAsync(Id, outBook.BookEntity.Id);
+			}
+		}
+	}
+
+	class ReaderViewModel
+	{
+		public Reader ReaderEntity { get; set; }
+	}
+
+	// WIP need a way for reader to select books
+	private List<BookViewModel> _availableBooks = [];
+
+	class BookViewModel
+	{
+		public Book BookEntity { get; set; }
+		public bool IsSelected { get; set; }
+	}
+
+}
