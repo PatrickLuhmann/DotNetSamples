@@ -8,31 +8,53 @@ public interface IBookKlubKornerService
 	// BOOKS
 	//
 
-	// Sync
-	List<Book> GetAllBooks();
-
-	// Async
+	int GetCountOfBooks();
 	Task<int> GetCountOfBooksAsync();
+
+	List<Book> GetAllBooks();
 	Task<List<Book>> GetAllBooksAsync();
+
+	void CreateBook(Book source);
+	Task CreateBookAsync(Book source);
+
+	Book? GetBookById(int id);
 	Task<Book?> GetBookByIdAsync(int id);
+
+	void UpdateBook(Book source);
 	Task UpdateBookAsync(Book source);
+
+	void DeleteBook(int id);
 	Task DeleteBookAsync(int id);
-	Task<Book> CreateBookAsync(Book source);
 
 	//
 	// READERS
 	//
 
+	int GetCountOfReaders();
 	Task<int> GetCountOfReadersAsync();
+
+	List<Reader> GetAllReaders();
 	Task<List<Reader>> GetAllReadersAsync();
+
+	void CreateReader(Reader reader);
 	Task CreateReaderAsync(Reader reader);
+
+	Reader? GetReaderById(int id);
 	Task<Reader?> GetReaderByIdAsync(int id);
+
+	void UpdateReader(Reader reader);
 	Task UpdateReaderAsync(Reader reader);
+
+	void DeleteReader(int id);
+	Task DeleteReaderAsync(int id);
 
 	//
 	// BOOK STATUSES
 	//
 
-	//void CreateBookStatus(int readerId, int bookId);
-	Task CreateBookStatusAsync(int readerId, int bookId);
+	int GetCountOfBookStatuses();
+	Task<int> GetCountOfBookStatusesAsync();
+
+	void CreateBookStatus(Reader reader, Book book);
+	Task CreateBookStatusAsync(Reader reader, Book book);
 }

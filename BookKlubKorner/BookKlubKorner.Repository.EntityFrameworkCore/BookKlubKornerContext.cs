@@ -14,10 +14,15 @@ public class BookKlubKornerContext(DbContextOptions<BookKlubKornerContext> optio
 // This is so 'dotnet ef migrations' commands will work.
 public class BookKlubKornerContextFactory : IDesignTimeDbContextFactory<BookKlubKornerContext>
 {
+	// First arg is database path.
+	// TODO: Make this more formal if it actually gets used to any extent.
 	public BookKlubKornerContext CreateDbContext(string[] args)
 	{
+		string databasePath = "bookklubkorner-dt.db";
+		if (args.Length == 1)
+			databasePath = args[0];
 		var optionsBuilder = new DbContextOptionsBuilder<BookKlubKornerContext>();
-		optionsBuilder.UseSqlite("Data Source=bookklubkorner-dt.db");
+		optionsBuilder.UseSqlite($"Data Source={databasePath}");
 
 		return new BookKlubKornerContext(optionsBuilder.Options);
 	}

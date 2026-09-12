@@ -5,35 +5,16 @@ namespace BookKlubKorner.Repository.EntityFrameworkCore;
 
 public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 {
-	public int GetCountOfBooks()
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return context.Books.Count();
-	}
-
 	public async Task<int> GetCountOfBooksAsync()
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
 		return context.Books.Count();
 	}
 
-	public IEnumerable<Book> GetAllBooks()
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return [.. context.Books];
-	}
-
 	public async Task<IEnumerable<Book>> GetAllBooksAsync()
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
 		return [.. context.Books];
-	}
-
-	public void AddBook(Book book)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		context.Books.Add(book);
-		context.SaveChanges();
 	}
 
 	public async Task AddBookAsync(Book book)
@@ -43,30 +24,10 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
-	public Book? GetBook(int id)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return context.Books.Find(id);
-	}
-
 	public async Task<Book?> GetBookAsync(int id)
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
 		return await context.Books.FindAsync(id);
-	}
-
-	public void UpdateBook(Book book)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		var origBook = context.Books.Find(book.Id);
-		if (origBook is null)
-			throw new Exception($"Book with id={book.Id} not found in database.");
-		origBook.Title = book.Title;
-		origBook.Author = book.Author;
-		origBook.Publisher = book.Publisher;
-		origBook.NumPages = book.NumPages;
-		origBook.PublicationYear = book.PublicationYear;
-		context.SaveChanges();
 	}
 
 	public async Task UpdateBookAsync(Book book)
@@ -83,16 +44,6 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
-	public void DeleteBook(int id)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		var book = context.Books.Find(id);
-		if (book is null)
-			throw new Exception($"Book with id={id} not found in database.");
-		context.Books.Remove(book);
-		context.SaveChanges();
-	}
-
 	public async Task DeleteBookAsync(int id)
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
@@ -103,35 +54,16 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
-	public int GetCountOfReaders()
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return context.Readers.Count();
-	}
-
 	public async Task<int> GetCountOfReadersAsync()
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
 		return context.Readers.Count();
 	}
 
-	public IEnumerable<Reader> GetAllReaders()
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return [.. context.Readers];
-	}
-
 	public async Task<IEnumerable<Reader>> GetAllReadersAsync()
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
 		return [.. context.Readers];
-	}
-
-	public void AddReader(Reader reader)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		context.Readers.Add(reader);
-		context.SaveChanges();
 	}
 
 	public async Task AddReaderAsync(Reader reader)
@@ -141,27 +73,18 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
-	public Reader? GetReader(int id)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		return context.Readers.Find(id);
-	}
-
 	public async Task<Reader?> GetReaderAsync(int id)
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
-		return await context.Readers.FindAsync(id);
-	}
+		var reader = await context.Readers.FindAsync(id);
+		if (reader is null) return reader;
+		await context.Entry(reader).Collection(r => r.BookStatuses).LoadAsync();
+		foreach (var bookStatus in reader.BookStatuses)
+		{
+			await context.Entry(bookStatus).Reference(bs => bs.Book).LoadAsync();
+		}
 
-	public void UpdateReader(Reader reader)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		var origReader = context.Readers.Find(reader.Id);
-		if (origReader is null)
-			throw new Exception($"Reader with id={reader.Id} not found in database.");
-		origReader.Nickname = reader.Nickname;
-		origReader.Biography = reader.Biography;
-		context.SaveChanges();
+		return reader;
 	}
 
 	public async Task UpdateReaderAsync(Reader reader)
@@ -175,31 +98,30 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
-	public void CreateBookStatus(int readerId, int bookId)
-	{
-		using var context = _contextFactory.CreateDbContext();
-		var reader = context.Readers.Find(readerId);
-		if (reader is null)
-			throw new Exception($"Reader with id={readerId} not found in database.");
-		var book = context.Books.Find(bookId);
-		if (book is null)
-			throw new Exception($"Book with id={bookId} not found in database.");
-		reader.BookStatuses.Add(new BookStatus());
-		context.SaveChanges();
-	}
-
-	public async Task CreateBookStatusAsync(int readerId, int bookId)
+	public async Task DeleteReaderAsync(int id)
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
-		var reader = await context.Readers.FindAsync(readerId);
+		var reader = await context.Readers.FindAsync(id);
 		if (reader is null)
-			throw new Exception($"Reader with id={readerId} not found in database.");
-		var book = await context.Books.FindAsync(bookId);
-		if (book is null)
-			throw new Exception($"Book with id={bookId} not found in database.");
-		var bStatus = new BookStatus();
-		reader.BookStatuses.Add(bStatus);
-		book.BookStatuses.Add(bStatus);
+			throw new Exception($"Reader with id={id} not found in database.");
+		context.Readers.Remove(reader);
+		await context.SaveChangesAsync();
+	}
+
+	public async Task<int> GetCountOfBookStatusesAsync()
+	{
+		await using var context = await _contextFactory.CreateDbContextAsync();
+		return context.BookStatuses.Count();
+	}
+
+	public async Task CreateBookStatusAsync(Reader reader, Book book)
+	{
+		await using var context = await _contextFactory.CreateDbContextAsync();
+		context.Attach(reader);
+		context.Attach(book);
+		var bookStatus = new BookStatus();
+		reader.BookStatuses.Add(bookStatus);
+		book.BookStatuses.Add(bookStatus);
 		await context.SaveChangesAsync();
 	}
 
