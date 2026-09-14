@@ -16,15 +16,21 @@
 	<a href="/bookclub/reader-index">Go to readers</a>
 </p>
 
+<p>
+	There are @_bookStatusCount book statuses in the library.
+</p>
+
 @code {
 
 	int _bookCount;
 	int _readerCount;
+	int _bookStatusCount;
 
 	protected override async Task OnInitializedAsync()
 	{
 		_bookCount = await BookKlubKornerService.GetCountOfBooksAsync();
 		_readerCount = await BookKlubKornerService.GetCountOfReadersAsync();
+		_bookStatusCount = await BookKlubKornerService.GetCountOfBookStatusesAsync();
 	}
 
 }

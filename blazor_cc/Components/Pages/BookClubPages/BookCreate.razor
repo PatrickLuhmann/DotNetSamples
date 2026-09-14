@@ -2,6 +2,7 @@
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
+@using blazor_cc.ViewModels
 
 @inject IBookKlubKornerService BookKlubKornerService
 @inject NavigationManager NavigationManager
@@ -17,33 +18,33 @@ else
 	<div class="row">
 		<div class="col-md-4">
 			@* In order to "see" the data annotations, we must explicitly reference BookEntity in Model property. *@
-			<EditForm method="post" Model="BookToCreate.BookEntity" OnValidSubmit="CreateBook" FormName="createbook" Enhance>
+			<EditForm method="post" Model="BookToCreate" OnValidSubmit="CreateBook" FormName="createbook" Enhance>
 				<DataAnnotationsValidator/>
 				<ValidationSummary role="alert"/>
 				<div class="mb-3">
 					<label for="title" class="form-label">Title:</label>
-					<InputText id="title" @bind-Value="BookToCreate.BookEntity!.Title" class="form-control"/>
-					<ValidationMessage For="() => BookToCreate.BookEntity.Title" class="text-danger"/>
+					<InputText id="title" @bind-Value="BookToCreate.Title" class="form-control"/>
+					<ValidationMessage For="() => BookToCreate.Title" class="text-danger"/>
 				</div>
 				<div class="mb-3">
 					<label for="author" class="form-label">Author:</label>
-					<InputText id="author" @bind-Value="BookToCreate.BookEntity!.Author" class="form-control"/>
-					<ValidationMessage For="() => BookToCreate.BookEntity.Author" class="text-danger"/>
+					<InputText id="author" @bind-Value="BookToCreate.Author" class="form-control"/>
+					<ValidationMessage For="() => BookToCreate.Author" class="text-danger"/>
 				</div>
 				<div class="mb-3">
 					<label for="publisher" class="form-label">Publisher:</label>
-					<InputText id="publisher" @bind-Value="BookToCreate.BookEntity!.Publisher" class="form-control"/>
-					<ValidationMessage For="() => BookToCreate.BookEntity.Publisher" class="text-danger"/>
+					<InputText id="publisher" @bind-Value="BookToCreate.Publisher" class="form-control"/>
+					<ValidationMessage For="() => BookToCreate.Publisher" class="text-danger"/>
 				</div>
 				<div class="mb-3">
 					<label for="pages" class="form-label">Number Of Pages:</label>
-					<InputNumber id="pages" @bind-Value="BookToCreate.BookEntity!.NumPages" class="form-control"/>
-					<ValidationMessage For="() => BookToCreate.BookEntity.NumPages" class="text-danger"/>
+					<InputNumber id="pages" @bind-Value="BookToCreate.NumPages" class="form-control"/>
+					<ValidationMessage For="() => BookToCreate.NumPages" class="text-danger"/>
 				</div>
 				<div class="mb-3">
 					<label for="year" class="form-label">Year Published:</label>
-					<InputNumber id="year" @bind-Value="BookToCreate.BookEntity!.PublicationYear" class="form-control"/>
-					<ValidationMessage For="() => BookToCreate.BookEntity.PublicationYear" class="text-danger"/>
+					<InputNumber id="year" @bind-Value="BookToCreate.PublicationYear" class="form-control"/>
+					<ValidationMessage For="() => BookToCreate.PublicationYear" class="text-danger"/>
 				</div>
 				<button type="submit" class="btn btn-primary">Create</button>
 				<a href="/bookclub/book-index" class="btn btn-info">Back To Book List</a>
@@ -55,7 +56,7 @@ else
 @code {
 
 	[SupplyParameterFromForm]
-	private CreateBookViewModel? BookToCreate { get; set; }
+	private BookViewModel? BookToCreate { get; set; }
 
 	@*
 	   This is called once when the component is loaded (there is no pre-render).
@@ -65,22 +66,22 @@ else
 	*@
 	protected override void OnInitialized()
 	{
-		BookToCreate ??= new()
-		{
-			BookEntity = new Book(),
-		};
+		BookToCreate ??= new BookViewModel();
 	}
 
 	private async Task CreateBook()
 	{
-		await BookKlubKornerService.CreateBookAsync(BookToCreate!.BookEntity!);
+		var bookEntity = new Book()
+		{
+			Title = BookToCreate!.Title,
+			Author = BookToCreate!.Author,
+			Publisher = BookToCreate!.Publisher,
+			NumPages = BookToCreate!.NumPages,
+			PublicationYear = BookToCreate!.PublicationYear,
+		};
+		await BookKlubKornerService.CreateBookAsync(bookEntity);
 
 		NavigationManager.NavigateTo("/bookclub/book-index");
-	}
-
-	class CreateBookViewModel
-	{
-		public Book? BookEntity { get; init; }
 	}
 
 }

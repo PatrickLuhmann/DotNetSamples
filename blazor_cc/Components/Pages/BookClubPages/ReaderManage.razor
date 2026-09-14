@@ -23,6 +23,8 @@ else
 			<li>
 				ID: @status.Id
 				Title: @status.Book.Title
+				<button>Button</button>
+				<a href="/bookclub/reader-index">Link</a>
 			</li>
 		}
 	</ul>
@@ -38,6 +40,7 @@ else
 		}
 	</ul>
 	<button @onclick="UpdateBooksInCollection">Update</button>
+	<a href="/bookclub/reader-index" class="btn btn-info">Back To Reader List</a>
 }
 
 @code {
@@ -73,14 +76,14 @@ else
 		}
 	}
 
-	async void UpdateBooksInCollection()
+	async Task UpdateBooksInCollection()
 	{
 		// TODO: I can't modify the collection inside the foreach, right? So remove them in a separate step.
 		foreach (var outBook in _availableBooks)
 		{
 			if (outBook.IsSelected)
 			{
-				await BookKlubKornerService.CreateBookStatusAsync(Id, outBook.BookEntity.Id);
+				await BookKlubKornerService.CreateBookStatusAsync(ReaderToManage!.ReaderEntity, outBook.BookEntity);
 			}
 		}
 	}

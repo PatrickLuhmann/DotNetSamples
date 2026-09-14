@@ -20,16 +20,7 @@
 		<PropertyColumn Property="book => book.Publisher"/>
 
 		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit?id={book.Id}")">Edit (Static)</a> |
-			<a href="@($"bookclub/book-edit-intsrv?id={book.Id}")">Edit (Int Serv)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit-vm?id={book.Id}")">Edit (VM)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
-			<a href="@($"bookclub/book-edit-vm-wrap?id={book.Id}")">Edit (VM wrap)</a>
-		</TemplateColumn>
-		<TemplateColumn Context="book">
+			<a href="@($"bookclub/book-edit?id={book.Id}")">Edit</a> |
 			<a href="@($"bookclub/book-delete?id={book.Id}")">Delete</a>
 		</TemplateColumn>
 	</QuickGrid>

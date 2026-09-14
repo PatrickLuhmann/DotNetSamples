@@ -28,4 +28,10 @@
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="BookKlubKornerSqlite.db-wal" />
+    <None Remove="BookKlubKornerSqlite.db-shm" />
+    <None Remove="BookKlubKornerSqlite.db" />
+  </ItemGroup>
+
 </Project>

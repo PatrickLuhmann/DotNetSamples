@@ -17,18 +17,18 @@ else
 	<div class="row">
 		<div class="col-md-4">
 			@* In order to "see" the data annotations, we must explicitly reference ReaderEntity in Model property. *@
-			<EditForm method="post" Model="ReaderToCreate.ReaderEntity" OnValidSubmit="CreateReader" FormName="createreader" Enhance>
+			<EditForm method="post" Model="ReaderToCreate" OnValidSubmit="CreateReader" FormName="createreader" Enhance>
 				<DataAnnotationsValidator/>
 				<ValidationSummary role="alert"/>
 				<div class="mb-3">
 					<label for="nickname" class="form-label">Nickname:</label>
-					<InputText id="nickname" @bind-Value="ReaderToCreate.ReaderEntity!.Nickname" class="form-control"/>
-					<ValidationMessage For="() => ReaderToCreate.ReaderEntity.Nickname" class="text-danger"/>
+					<InputText id="nickname" @bind-Value="ReaderToCreate!.Nickname" class="form-control"/>
+					<ValidationMessage For="() => ReaderToCreate.Nickname" class="text-danger"/>
 				</div>
 				<div class="mb-3">
 					<label for="biography" class="form-label">Biography:</label>
-					<InputText id="biography" @bind-Value="ReaderToCreate.ReaderEntity!.Biography" class="form-control"/>
-					<ValidationMessage For="() => ReaderToCreate.ReaderEntity.Biography" class="text-danger"/>
+					<InputText id="biography" @bind-Value="ReaderToCreate!.Biography" class="form-control"/>
+					<ValidationMessage For="() => ReaderToCreate.Biography" class="text-danger"/>
 				</div>
 				<button type="submit" class="btn btn-primary">Create</button>
 				<a href="/bookclub/reader-index" class="btn btn-info">Back To Reader List</a>
@@ -52,20 +52,27 @@ else
 	{
 		ReaderToCreate ??= new()
 		{
-			ReaderEntity = new Reader(),
+			//ReaderEntity = new Reader(),
 		};
 	}
 
 	private async Task CreateReader()
 	{
-		await BookKlubKornerService.CreateReaderAsync(ReaderToCreate!.ReaderEntity!);
+		var readerEntity = new Reader()
+		{
+			Nickname = ReaderToCreate.Nickname,
+			Biography = ReaderToCreate.Biography,
+		};
+		await BookKlubKornerService.CreateReaderAsync(readerEntity!);
 
 		NavigationManager.NavigateTo("/bookclub/reader-index");
 	}
 
 	class CreateReaderViewModel
 	{
-		public Reader? ReaderEntity { get; init; }
+		//public Reader? ReaderEntity { get; init; }
+		public string Nickname { get; set; } = string.Empty;
+		public string Biography { get; set; } = string.Empty;
 	}
 
 }

@@ -2,13 +2,12 @@
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
+@using blazor_cc.ViewModels
 
 @inject IBookKlubKornerService BookKlubKornerService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Edit Book</PageTitle>
-
-<p>RendererInfo.IsInteractive: @RendererInfo.IsInteractive </p>
 
 @if (BookToEdit is null)
 {
@@ -43,7 +42,6 @@ else
 				</div>
 				<button type="submit" class="btn btn-primary">Update</button>
 				<a href="/bookclub/book-index" class="btn btn-info">Back To Book List</a>
-				<input type="hidden" name="BookToEdit.Id" value="@BookToEdit.Id"/>
 			</EditForm>
 		</div>
 	</div>
@@ -55,7 +53,7 @@ else
 	private int Id { get; set; }
 
 	[SupplyParameterFromForm]
-	private Book? BookToEdit { get; set; }
+	private BookViewModel? BookToEdit { get; set; }
 
 	@*
 	   This is called once when the component is loaded (there is no pre-render).
@@ -65,12 +63,33 @@ else
 	*@
 	protected override async Task OnInitializedAsync()
 	{
-		BookToEdit ??= await BookKlubKornerService.GetBookByIdAsync(Id);
+		var bookEntity = await BookKlubKornerService.GetBookByIdAsync(Id);
+		if (bookEntity is null)
+			NavigationManager.NotFound();
+		else
+			BookToEdit ??= new BookViewModel
+			{
+				Title = bookEntity.Title,
+				Author = bookEntity.Author,
+				Publisher = bookEntity.Publisher,
+				NumPages = bookEntity.NumPages,
+				PublicationYear = bookEntity.PublicationYear,
+			};
 	}
 
 	private async Task UpdateBook()
 	{
-		await BookKlubKornerService.UpdateBookAsync(BookToEdit!);
+		// Data validation goes here if not in the VM class.
+		var bookEntity = new Book()
+		{
+			Id = Id,
+			NumPages = BookToEdit!.NumPages,
+			PublicationYear = BookToEdit!.PublicationYear,
+			Publisher = BookToEdit!.Publisher!,
+			Author = BookToEdit!.Author!,
+			Title = BookToEdit!.Title!,
+		};
+		await BookKlubKornerService.UpdateBookAsync(bookEntity);
 		NavigationManager.NavigateTo("/bookclub/book-index");
 	}
 

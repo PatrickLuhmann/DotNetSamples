@@ -58,10 +58,11 @@ public class BookKlubKornerSample : IConsoleSample
 			Author = "Sample Author",
 			Publisher = "Sample Publisher",
 			PublicationYear = 1974,
-			NumPages = 722,
+			NumPages = 226,
 		};
 		bkkService.CreateBook(book3);
-		PrintBook(book3);
+		//PrintBook(book3);
+		PrintBook(bkkService.GetBookById(book3.Id));
 		Console.WriteLine();
 
 		// Create a new reader to work with.
