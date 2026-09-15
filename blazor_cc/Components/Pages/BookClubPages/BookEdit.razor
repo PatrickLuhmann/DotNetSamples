@@ -1,4 +1,5 @@
 @page "/bookclub/book-edit"
+@rendermode InteractiveServer
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
@@ -55,26 +56,13 @@ else
 	[SupplyParameterFromForm]
 	private BookViewModel? BookToEdit { get; set; }
 
-	@*
-	   This is called once when the component is loaded (there is no pre-render).
-	   This is also called on form submit, before the submit callback. In that case,
-	   we don't want to overwrite BookToEdit, which is why we check for null before
-	   getting a new object.
-	*@
 	protected override async Task OnInitializedAsync()
 	{
 		var bookEntity = await BookKlubKornerService.GetBookByIdAsync(Id);
 		if (bookEntity is null)
 			NavigationManager.NotFound();
 		else
-			BookToEdit ??= new BookViewModel
-			{
-				Title = bookEntity.Title,
-				Author = bookEntity.Author,
-				Publisher = bookEntity.Publisher,
-				NumPages = bookEntity.NumPages,
-				PublicationYear = bookEntity.PublicationYear,
-			};
+			BookToEdit = new BookViewModel(bookEntity);
 	}
 
 	private async Task UpdateBook()
@@ -85,9 +73,9 @@ else
 			Id = Id,
 			NumPages = BookToEdit!.NumPages,
 			PublicationYear = BookToEdit!.PublicationYear,
-			Publisher = BookToEdit!.Publisher!,
-			Author = BookToEdit!.Author!,
-			Title = BookToEdit!.Title!,
+			Publisher = BookToEdit!.Publisher,
+			Author = BookToEdit!.Author,
+			Title = BookToEdit!.Title,
 		};
 		await BookKlubKornerService.UpdateBookAsync(bookEntity);
 		NavigationManager.NavigateTo("/bookclub/book-index");

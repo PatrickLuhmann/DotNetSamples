@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using BookKlubKorner.Model;
 
 namespace blazor_cc.ViewModels;
 
 public class BookViewModel
 {
+	public int Id { get; set; }
+
 	[Required]
 	[StringLength(120)]
 	[RegularExpression(@"^\S[\S\s]*$")]
@@ -26,4 +29,16 @@ public class BookViewModel
 	[Required]
 	[Range(-4000, 3000)]
 	public int PublicationYear { get; set; }
+
+	public BookViewModel() { }
+
+	public BookViewModel(Book bookEntity)
+	{
+		Id = bookEntity.Id;
+		Title = bookEntity.Title;
+		Author = bookEntity.Author;
+		Publisher = bookEntity.Publisher;
+		NumPages = bookEntity.NumPages;
+		PublicationYear = bookEntity.PublicationYear;
+	}
 }

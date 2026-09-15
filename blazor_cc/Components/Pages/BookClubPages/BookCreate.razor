@@ -1,4 +1,5 @@
 @page "/bookclub/book-create"
+@rendermode InteractiveServer
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
@@ -58,15 +59,9 @@ else
 	[SupplyParameterFromForm]
 	private BookViewModel? BookToCreate { get; set; }
 
-	@*
-	   This is called once when the component is loaded (there is no pre-render).
-	   This is also called on form submit, before the submit callback. In that case,
-	   we don't want to overwrite BookToCreate, which is why we check for null before
-	   getting a new object.
-	*@
 	protected override void OnInitialized()
 	{
-		BookToCreate ??= new BookViewModel();
+		BookToCreate = new BookViewModel();
 	}
 
 	private async Task CreateBook()

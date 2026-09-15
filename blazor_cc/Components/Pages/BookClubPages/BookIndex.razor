@@ -1,7 +1,7 @@
 @page "/bookclub/book-index"
 
+@using blazor_cc.ViewModels
 @using BookKlubKorner.Domain
-@using BookKlubKorner.Model
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 @inject IBookKlubKornerService BookKlubKornerService
@@ -27,12 +27,13 @@
 </div>
 
 @code {
-	List<Book> _books = [];
-	IQueryable<Book> QuickBooks => _books.AsQueryable();
+	List<BookViewModel> _books = [];
+	IQueryable<BookViewModel> QuickBooks => _books.AsQueryable();
 
 	protected override async Task OnInitializedAsync()
 	{
-		_books = await BookKlubKornerService.GetAllBooksAsync();
+		var bookEntities = await BookKlubKornerService.GetAllBooksAsync();
+		_books = [.. bookEntities.Select(be => new BookViewModel(be))];
 	}
 
 }
