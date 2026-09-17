@@ -1,0 +1,97 @@
+@page "/bookclub/book-edit-vm-wrap"
+
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+
+@inject IBookKlubKornerService BookKlubKornerService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit Book (VM Wrap)</PageTitle>
+
+@if (BookToEdit is null)
+{
+	<p>Searching the vast library for the book you requested...</p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			@* In order to "see" the data annotations, we must explicitly reference BookEntity in Model property. *@
+			<EditForm method="post" Model="BookToEdit.BookEntity" OnValidSubmit="UpdateBook" FormName="editbook2" Enhance>
+				<DataAnnotationsValidator/>
+				<ValidationSummary role="alert"/>
+				<div class="mb-3">
+					<label for="title2" class="form-label">Title:</label>
+					<InputText id="title2" @bind-Value="BookToEdit.BookEntity!.Title" class="form-control"/>
+					<ValidationMessage For="() => BookToEdit.BookEntity.Title" class="text-danger"/>
+				</div>
+				<div class="mb-3">
+					<label for="author2" class="form-label">Author:</label>
+					<InputText id="author2" @bind-Value="BookToEdit.BookEntity!.Author" class="form-control"/>
+					<ValidationMessage For="() => BookToEdit.BookEntity.Author" class="text-danger"/>
+				</div>
+				<div class="mb-3">
+					<label for="publisher2" class="form-label">Publisher:</label>
+					<InputText id="publisher2" @bind-Value="BookToEdit.BookEntity!.Publisher" class="form-control"/>
+					<ValidationMessage For="() => BookToEdit.BookEntity.Publisher" class="text-danger"/>
+				</div>
+				<div class="mb-3">
+					<label for="pages2" class="form-label">Number Of Pages:</label>
+					<InputNumber id="pages2" @bind-Value="BookToEdit.BookEntity!.NumPages" class="form-control"/>
+					<ValidationMessage For="() => BookToEdit.BookEntity.NumPages" class="text-danger"/>
+				</div>
+				<div class="mb-3">
+					<label for="year2" class="form-label">Year Published:</label>
+					<InputNumber id="year2" @bind-Value="BookToEdit.BookEntity!.PublicationYear" class="form-control"/>
+					<ValidationMessage For="() => BookToEdit.BookEntity.PublicationYear" class="text-danger"/>
+				</div>
+				<button type="submit" class="btn btn-primary">Update</button>
+				<a href="/bookclub/book-index" class="btn btn-info">Back To Book List</a>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+
+	[SupplyParameterFromQuery]
+	private int Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private EditBookViewModel? BookToEdit { get; set; }
+
+	@*
+	   This is called once when the component is loaded (there is no pre-render).
+	   This is also called on form submit, before the submit callback. In that case,
+	   we don't want to overwrite BookToEdit, which is why we check for null before
+	   getting a new object.
+	*@
+	protected override async Task OnInitializedAsync()
+	{
+		if (BookToEdit is null)
+		{
+			var bookEntity = await BookKlubKornerService.GetBookByIdAsync(Id);
+			if (bookEntity is null)
+				NavigationManager.NotFound();
+			else
+				BookToEdit = new()
+				{
+					BookEntity = bookEntity
+				};
+		}
+	}
+
+	private async Task UpdateBook()
+	{
+		BookToEdit!.BookEntity!.Id = Id; // restore the correct Id
+		await BookKlubKornerService.UpdateBookAsync(BookToEdit.BookEntity);
+
+		NavigationManager.NavigateTo("/bookclub/book-index");
+	}
+
+	class EditBookViewModel
+	{
+		public Book? BookEntity { get; init; }
+	}
+
+}

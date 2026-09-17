@@ -15,11 +15,10 @@ builder.Services.AddDbContextFactory<BlazorWebAppMoviesContext>(options =>
 		builder.Configuration.GetConnectionString("BlazorWebAppMoviesContext") ??
 		throw new InvalidOperationException("Connection string 'BlazorWebAppMoviesContext' not found.")));
 
-builder.Services.AddDbContextFactory<BookKlubKornerContext>(options => options
-	.UseSqlite(
+builder.Services.AddDbContextFactory<BookKlubKornerContext>(options =>
+	options.UseSqlite(
 		builder.Configuration.GetConnectionString("BookKlubKornerContext") ??
-		throw new InvalidOperationException("Connection string 'BookKlubKornerContext' not found."))
-	.EnableSensitiveDataLogging());
+		throw new InvalidOperationException("Connection string 'BookKlubKornerContext' not found.")));
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
