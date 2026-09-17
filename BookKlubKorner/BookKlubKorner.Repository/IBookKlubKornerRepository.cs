@@ -31,5 +31,7 @@ public interface IBookKlubKornerRepository
 	//
 
 	Task<int> GetCountOfBookStatusesAsync();
+	Task<List<BookStatus>> GetAllBookStatusesAsync();
 	Task CreateBookStatusAsync(Reader reader, Book book);
+	Task<BookStatus?> GetBookStatusAsync(int id);
 }

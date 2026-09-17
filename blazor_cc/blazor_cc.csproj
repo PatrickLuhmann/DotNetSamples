@@ -11,7 +11,6 @@
     <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Domain\BookKlubKorner.Domain.csproj" />
     <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Model\BookKlubKorner.Model.csproj" />
     <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Repository.EntityFrameworkCore\BookKlubKorner.Repository.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Repository.InMemory\BookKlubKorner.Repository.InMemory.csproj" />
     <ProjectReference Include="..\BookKlubKorner\BookKlubKorner.Repository\BookKlubKorner.Repository.csproj" />
     <ProjectReference Include="..\TaxTools\TaxTools\TaxTools.csproj" />
   </ItemGroup>

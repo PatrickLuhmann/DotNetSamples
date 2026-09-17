@@ -1,7 +1,7 @@
 @page "/bookclub/reader-index"
 
+@using blazor_cc.ViewModels
 @using BookKlubKorner.Domain
-@using BookKlubKorner.Model
 @using Microsoft.AspNetCore.Components.QuickGrid
 
 @inject IBookKlubKornerService BookKlubKornerService
@@ -17,7 +17,7 @@
 		<PropertyColumn Property="reader => reader.Biography"/>
 
 		<TemplateColumn Context="reader">
-			<a href="@($"bookclub/reader-edit-vm-wrap?id={reader.Id}")">Edit (VM wrap)</a>
+			<a href="@($"bookclub/reader-edit?id={reader.Id}")">Edit</a>
 		</TemplateColumn>
 		<TemplateColumn Context="reader">
 			<a href="@($"bookclub/reader-manage?id={reader.Id}")">Manage</a>
@@ -29,12 +29,13 @@
 </div>
 
 @code {
-	List<Reader> _readers = [];
-	IQueryable<Reader> QuickReaders => _readers.AsQueryable();
+	List<ReaderViewModel> _readers = [];
+	IQueryable<ReaderViewModel> QuickReaders => _readers.AsQueryable();
 
 	protected override async Task OnInitializedAsync()
 	{
-		_readers = await BookKlubKornerService.GetAllReadersAsync();
+		var readerEntities = await BookKlubKornerService.GetAllReadersAsync();
+		_readers = [.. readerEntities.Select(re => new ReaderViewModel(re))];
 	}
 
 }

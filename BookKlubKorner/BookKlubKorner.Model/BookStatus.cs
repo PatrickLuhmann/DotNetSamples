@@ -6,18 +6,9 @@ public class BookStatus
 {
 	public int Id { get; set; }
 
-	[Required]
-	[Range(0, 10)]
 	public int Rating { get; set; }
-
-	[Required]
-	[Range(0, 100)]
 	public int Progress { get; set; }
-
-	[Required]
 	public bool Abandoned { get; set; }
-
-	[StringLength(256)]
 	public string Review { get; set; } = string.Empty;
 
 	// Foreign key for Reader

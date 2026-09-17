@@ -1,7 +1,8 @@
 @page "/bookclub/reader-delete"
+@rendermode InteractiveServer
 
 @using BookKlubKorner.Domain
-@using BookKlubKorner.Model
+@using blazor_cc.ViewModels
 
 @inject IBookKlubKornerService BookKlubKornerService
 @inject NavigationManager NavigationManager
@@ -19,15 +20,15 @@ else
 	<div>
 		<dl class="row">
 			<dt class="col-sm-2">Nickname</dt>
-			<dd class="col-sm-10">@ReaderToDelete.ReaderEntity!.Nickname</dd>
+			<dd class="col-sm-10">@ReaderToDelete.Nickname</dd>
 		</dl>
 		<dl class="row">
 			<dt class="col-sm-2">Biography</dt>
-			<dd class="col-sm-10">@ReaderToDelete.ReaderEntity!.Biography</dd>
+			<dd class="col-sm-10">@ReaderToDelete.Biography</dd>
 		</dl>
 		<dl class="row">
 			<dt class="col-sm-2">Number Of Books</dt>
-			<dd class="col-sm-10">@ReaderToDelete.ReaderEntity!.BookStatuses.Count</dd>
+			<dd class="col-sm-10">@ReaderToDelete.BookStatusIds.Count</dd>
 		</dl>
 		<p>Do you want to delete this reader?</p>
 		<EditForm method="post" Model="ReaderToDelete" OnValidSubmit="DeleteReader" FormName="delete" Enhance>
@@ -43,21 +44,15 @@ else
 	private int Id { get; set; }
 
 	[SupplyParameterFromForm]
-	private DeleteReaderViewModel? ReaderToDelete { get; set; }
+	private ReaderViewModel? ReaderToDelete { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		if (ReaderToDelete is null)
-		{
-			var readerEntity = await BookKlubKornerService.GetReaderByIdAsync(Id);
-			if (readerEntity is null)
-				NavigationManager.NotFound();
-			else
-				ReaderToDelete = new()
-				{
-					ReaderEntity = readerEntity
-				};
-		}
+		var readerEntity = await BookKlubKornerService.GetReaderByIdAsync(Id);
+		if (readerEntity is null)
+			NavigationManager.NotFound();
+		else
+			ReaderToDelete = new ReaderViewModel(readerEntity);
 	}
 
 	private async Task DeleteReader()
@@ -65,11 +60,6 @@ else
 		await BookKlubKornerService.DeleteReaderAsync(Id);
 
 		NavigationManager.NavigateTo("/bookclub/reader-index");
-	}
-
-	class DeleteReaderViewModel
-	{
-		public Reader? ReaderEntity { get; init; }
 	}
 
 }

@@ -30,6 +30,9 @@ public class BookViewModel
 	[Range(-4000, 3000)]
 	public int PublicationYear { get; set; }
 
+	[Required]
+	public List<int> BookStatusIds { get; set; } = [];
+
 	public BookViewModel() { }
 
 	public BookViewModel(Book bookEntity)
@@ -40,5 +43,6 @@ public class BookViewModel
 		Publisher = bookEntity.Publisher;
 		NumPages = bookEntity.NumPages;
 		PublicationYear = bookEntity.PublicationYear;
+		BookStatusIds = [.. bookEntity.BookStatuses.Select(bs => bs.Id)];
 	}
 }

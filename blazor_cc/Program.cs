@@ -4,7 +4,6 @@ using BlazorWebAppMovies.Data;
 using BookKlubKorner.Domain;
 using BookKlubKorner.Repository;
 using BookKlubKorner.Repository.EntityFrameworkCore;
-using BookKlubKorner.Repository.InMemory;
 using Microsoft.EntityFrameworkCore;
 
 // Create the app with preconfigured defaults.

@@ -140,10 +140,24 @@ public class DesignTimeBookKlubKornerService : IBookKlubKornerService
 
 	public int GetCountOfBookStatuses() { return GetCountOfBookStatusesAsync().Result; }
 
+	public async Task<List<BookStatus>> GetAllBookStatusesAsync()
+	{
+		return await _repository.GetAllBookStatusesAsync();
+	}
+
+	public List<BookStatus> GetAllBookStatuses() { return GetAllBookStatusesAsync().Result; }
+
 	public async Task CreateBookStatusAsync(Reader reader, Book book)
 	{
 		await _repository.CreateBookStatusAsync(reader, book);
 	}
 
 	public void CreateBookStatus(Reader reader, Book book) { CreateBookStatusAsync(reader, book).Wait(); }
+
+	public async Task<BookStatus?> GetBookStatusByIdAsync(int id)
+	{
+		return await _repository.GetBookStatusAsync(id);
+	}
+
+	public BookStatus? GetBookStatusById(int id) { return GetBookStatusByIdAsync(id).Result; }
 }

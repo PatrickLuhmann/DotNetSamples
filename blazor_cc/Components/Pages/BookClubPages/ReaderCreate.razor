@@ -1,7 +1,9 @@
 @page "/bookclub/reader-create"
+@rendermode InteractiveServer
 
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
+@using blazor_cc.ViewModels
 
 @inject IBookKlubKornerService BookKlubKornerService
 @inject NavigationManager NavigationManager
@@ -40,39 +42,23 @@ else
 @code {
 
 	[SupplyParameterFromForm]
-	private CreateReaderViewModel? ReaderToCreate { get; set; }
+	private ReaderViewModel? ReaderToCreate { get; set; }
 
-	@*
-	   This is called once when the component is loaded (there is no pre-render).
-	   This is also called on form submit, before the submit callback. In that case,
-	   we don't want to overwrite ReaderToCreate, which is why we check for null before
-	   getting a new object.
-	*@
 	protected override void OnInitialized()
 	{
-		ReaderToCreate ??= new()
-		{
-			//ReaderEntity = new Reader(),
-		};
+		ReaderToCreate = new ReaderViewModel();
 	}
 
 	private async Task CreateReader()
 	{
 		var readerEntity = new Reader()
 		{
-			Nickname = ReaderToCreate.Nickname,
-			Biography = ReaderToCreate.Biography,
+			Nickname = ReaderToCreate!.Nickname,
+			Biography = ReaderToCreate!.Biography,
 		};
 		await BookKlubKornerService.CreateReaderAsync(readerEntity!);
 
 		NavigationManager.NavigateTo("/bookclub/reader-index");
-	}
-
-	class CreateReaderViewModel
-	{
-		//public Reader? ReaderEntity { get; init; }
-		public string Nickname { get; set; } = string.Empty;
-		public string Biography { get; set; } = string.Empty;
 	}
 
 }

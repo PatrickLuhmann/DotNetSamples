@@ -1,6 +1,7 @@
 @page "/bookclub/reader-manage"
 @rendermode InteractiveServer
 
+@using blazor_cc.ViewModels
 @using BookKlubKorner.Domain
 @using BookKlubKorner.Model
 
@@ -15,30 +16,43 @@
 }
 else
 {
-	<p>Reader: @ReaderToManage.ReaderEntity.Nickname</p>
-	<p>They have @ReaderToManage.ReaderEntity.BookStatuses.Count books in their collection.</p>
+	<p>Reader: @ReaderToManage.Nickname</p>
+	<p>They have @ReaderToManage.BookStatusIds.Count books in their collection.</p>
 	<ul>
-		@foreach (var status in ReaderToManage.ReaderEntity.BookStatuses)
+		@foreach (var status in ReadersBooks)
 		{
 			<li>
-				ID: @status.Id
-				Title: @status.Book.Title
+				Book ID: @status.BookId
+				Progress: @status.Progress %
+				Title: @GetBookTitle(status.BookId)
 				<button>Button</button>
 				<a href="/bookclub/reader-index">Link</a>
 			</li>
 		}
 	</ul>
 
-	<h2>Available Books</h2>
+	<h2>Available Books (Independent VM)</h2>
 	<ul>
 		@foreach (var book in _availableBooks)
 		{
 			<li>
 				<input type="checkbox" @bind="book.IsSelected"/>
-				@book.BookEntity.Title
+				@book.Title
 			</li>
 		}
 	</ul>
+
+	<h2>Available Books (Subclass VM)</h2>
+	<ul>
+		@foreach (var book in _availableBooksAlt)
+		{
+			<li>
+				<input type="checkbox" @bind="book.IsSelected"/>
+				@book.Title
+			</li>
+		}
+	</ul>
+
 	<button @onclick="UpdateBooksInCollection">Update</button>
 	<a href="/bookclub/reader-index" class="btn btn-info">Back To Reader List</a>
 }
@@ -49,6 +63,7 @@ else
 	private int Id { get; set; }
 
 	ReaderViewModel? ReaderToManage { get; set; }
+	List<BookStatusViewModel> ReadersBooks { get; set; } = [];
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -56,50 +71,76 @@ else
 		{
 			var readerEntity = await BookKlubKornerService.GetReaderByIdAsync(Id);
 			if (readerEntity is null)
+			{
 				NavigationManager.NotFound();
-			else
-				ReaderToManage = new()
-				{
-					ReaderEntity = readerEntity
-				};
+				return;
+			}
 
-			// WIP i think we only want to do this once as well
+			ReaderToManage = new ReaderViewModel(readerEntity);
+			foreach (var statusId in ReaderToManage.BookStatusIds)
+			{
+				var statusEntity = await BookKlubKornerService.GetBookStatusByIdAsync(statusId);
+				if (statusEntity is not null)
+					ReadersBooks.Add(new BookStatusViewModel(statusEntity));
+			}
+
 			var books = await BookKlubKornerService.GetAllBooksAsync();
-			_availableBooks =
-			[
-				.. books.Select(b => new BookViewModel()
+
+			// To get the list of available books, go through the global list of books
+			// and ignore the ones that are in our BookStatuses list.
+			foreach (var bookEntity in books)
+			{
+				if (ReadersBooks.Find(bs => bs.BookId == bookEntity.Id) is null)
 				{
-					BookEntity = b,
-					IsSelected = false,
-				})
-			];
+					_availableBooks.Add(new SelectBookViewModel()
+					{
+						Id = bookEntity.Id,
+						Title = bookEntity.Title,
+						Author = bookEntity.Author,
+						IsSelected = false,
+					});
+				}
+			}
 		}
 	}
 
 	async Task UpdateBooksInCollection()
 	{
+		var theReader = await BookKlubKornerService.GetReaderByIdAsync(ReaderToManage!.Id);
+
 		// TODO: I can't modify the collection inside the foreach, right? So remove them in a separate step.
 		foreach (var outBook in _availableBooks)
 		{
 			if (outBook.IsSelected)
 			{
-				await BookKlubKornerService.CreateBookStatusAsync(ReaderToManage!.ReaderEntity, outBook.BookEntity);
+				var theBook = await BookKlubKornerService.GetBookByIdAsync(outBook.Id);
+				await BookKlubKornerService.CreateBookStatusAsync(theReader, theBook);
 			}
 		}
 	}
 
-	class ReaderViewModel
+	private List<SelectBookViewModel> _availableBooks = [];
+
+	class SelectBookViewModel
 	{
-		public Reader ReaderEntity { get; set; }
+		//public Book BookEntity { get; set; }
+		public int Id { get; set; }
+		public string Title { get; set; }
+		public string Author { get; set; }
+		public bool IsSelected { get; set; }
 	}
 
-	// WIP need a way for reader to select books
-	private List<BookViewModel> _availableBooks = [];
+	private List<AltSelectBookViewModel> _availableBooksAlt = [];
 
-	class BookViewModel
+	class AltSelectBookViewModel : BookViewModel
 	{
-		public Book BookEntity { get; set; }
 		public bool IsSelected { get; set; }
+	}
+
+	string GetBookTitle(int bookId)
+	{
+		var bookEntity = BookKlubKornerService.GetBookById(bookId);
+		return bookEntity?.Title;
 	}
 
 }

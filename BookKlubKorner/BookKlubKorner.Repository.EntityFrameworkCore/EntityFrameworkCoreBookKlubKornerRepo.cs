@@ -114,6 +114,17 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		return context.BookStatuses.Count();
 	}
 
+	public async Task<List<BookStatus>> GetAllBookStatusesAsync()
+	{
+		await using var context = await _contextFactory.CreateDbContextAsync();
+		return
+		[
+			.. context.BookStatuses
+				.Include(bs => bs.Reader)
+				.Include(bs => bs.Book)
+		];
+	}
+
 	public async Task CreateBookStatusAsync(Reader reader, Book book)
 	{
 		await using var context = await _contextFactory.CreateDbContextAsync();
@@ -125,6 +136,11 @@ public class EntityFrameworkCoreBookKlubKornerRepo : IBookKlubKornerRepository
 		await context.SaveChangesAsync();
 	}
 
+	public async Task<BookStatus?> GetBookStatusAsync(int id)
+	{
+		await using var context = await _contextFactory.CreateDbContextAsync();
+		return await context.BookStatuses.FindAsync(id);
+	}
 
 	private readonly IDbContextFactory<BookKlubKornerContext> _contextFactory;
 

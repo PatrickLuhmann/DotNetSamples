@@ -1,0 +1,57 @@
+@page "/bookclub/status-index"
+
+@using blazor_cc.ViewModels
+@using BookKlubKorner.Domain
+@using BookKlubKorner.Model
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+@inject IBookKlubKornerService BookKlubKornerService
+
+<PageTitle>Book Status Index</PageTitle>
+
+<h1>Book Statuses In The Book Club</h1>
+
+<a href="/bookclub">Back To Book Club Home</a>
+
+<div>
+	<QuickGrid Class="table" Items="QuickStatuses">
+		<PropertyColumn Property="status => status.Rating" Sortable="true"/>
+		<PropertyColumn Property="status => status.Progress" Sortable="true"/>
+		<PropertyColumn Property="status => status.Abandoned"/>
+		<PropertyColumn Property="status => status.Review"/>
+		<PropertyColumn Property="status => status.BookTitle" Title="Book"/>
+		<PropertyColumn Property="status => status.ReaderName" Title="Reader"/>
+
+		<TemplateColumn Context="status">
+			<a href="@($"bookclub/status-edit?id={status.Id}")">Edit</a> |
+			<a href="@($"bookclub/status-delete?id={status.Id}")">Delete</a>
+		</TemplateColumn>
+	</QuickGrid>
+</div>
+
+@code {
+	List<BookStatusIndexViewModel> _statuses = [];
+	IQueryable<BookStatusIndexViewModel> QuickStatuses => _statuses.AsQueryable();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var statusEntities = await BookKlubKornerService.GetAllBookStatusesAsync();
+		_statuses = [.. statusEntities.Select(bse => new BookStatusIndexViewModel(BookKlubKornerService, bse))];
+	}
+
+	class BookStatusIndexViewModel : BookStatusViewModel
+	{
+		public string BookTitle { get; set; } = string.Empty;
+		public string ReaderName { get; set; } = string.Empty;
+
+		public BookStatusIndexViewModel(IBookKlubKornerService service, BookStatus statusEntity) : base(statusEntity)
+		{
+			var bookEntity = service.GetBookById(BookId);
+			BookTitle = bookEntity?.Title;
+			var readerEntity = service.GetReaderById(ReaderId);
+			ReaderName = readerEntity?.Nickname;
+			
+		}
+	}
+
+}
