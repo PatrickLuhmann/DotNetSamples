@@ -10,10 +10,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add factory for EF Core
-builder.Services.AddDbContextFactory<BlazorWebAppMoviesContext>(options =>
-	options.UseSqlite(
+builder.Services.AddDbContextFactory<BlazorWebAppMoviesContext>(options => options
+	.UseSqlite(
 		builder.Configuration.GetConnectionString("BlazorWebAppMoviesContext") ??
-		throw new InvalidOperationException("Connection string 'BlazorWebAppMoviesContext' not found.")));
+		throw new InvalidOperationException("Connection string 'BlazorWebAppMoviesContext' not found."))
+	.EnableSensitiveDataLogging());
 
 builder.Services.AddDbContextFactory<BookKlubKornerContext>(options =>
 	options.UseSqlite(
