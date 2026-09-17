@@ -16,6 +16,7 @@ while (!quit)
 	Console.WriteLine("Please select a sample to run.");
 	Console.WriteLine("1. Nutrtion database app");
 	Console.WriteLine("2. Tax Helper app");
+	Console.WriteLine("3. Book Klub Korner app");
 	Console.WriteLine("O. Other information");
 	Console.WriteLine("Q. Quit");
 
@@ -55,6 +56,9 @@ bool SelectSample(string? id)
 			break;
 		case "2":
 			sample = new TaxHelperSample();
+			break;
+		case "3":
+			sample = new BookKlubKornerSample();
 			break;
 		case "o":
 			OtherInformation();
